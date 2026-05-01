@@ -10,3 +10,4 @@ tmp-*.png
 .env
 .env.local
 .env.*.local
+.vercel
