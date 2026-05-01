@@ -8,6 +8,12 @@ BNB ChainAgent Radar
 
 AI wallet intelligence for BNB Chain with live RPC analysis, optional indexer enrichment, and a safe AgentPay approval simulation.
 
+## Links
+
+- Live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+- GitHub repository: pending public repo
+- Demo video: pending recording
+
 ## Short Description
 
 BNB ChainAgent Radar turns a BNB wallet address into a live operating brief. It reads BNB Smart Chain RPC data, summarizes wallet readiness and risk, optionally enriches activity through Etherscan API V2, and simulates a bounded AgentPay action with gas estimation and human approval checks.
@@ -61,4 +67,3 @@ The AgentPay demo does not request a private key, does not request a signature, 
 - Add a sponsor-specific stablecoin/payment action.
 - Add testnet-only real wallet signing behind explicit human approval.
 - Package Mantle and QIE versions with separate integrations and disclosures.
-

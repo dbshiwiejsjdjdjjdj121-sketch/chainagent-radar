@@ -4,6 +4,10 @@
 
 BNB ChainAgent Radar
 
+## Live Demo
+
+https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+
 ## Short Description
 
 BNB ChainAgent Radar is an AI wallet intelligence dashboard that turns a BNB Smart Chain wallet address into a live operating brief: native balance, transaction activity, latest block verification, risk signals, and sponsor-specific next actions.

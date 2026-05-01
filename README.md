@@ -4,6 +4,10 @@ AI wallet intelligence for online Web3 hackathons.
 
 ChainAgent Radar turns a BNB Chain wallet address into a live operating brief: native balance, transaction activity, latest block verification, risk signals, sponsor-specific next actions, and a safe AgentPay approval simulation.
 
+## Live Preview
+
+Current Vercel preview: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+
 ## Hackathon Focus
 
 Current primary target: **BNB Hack: Online Edition**.
@@ -80,4 +84,3 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md).
 ## Adaptation Rule
 
 Do not submit this generic motherbase unchanged to multiple contests. Each contest should receive a new repo branch or folder with event-specific integrations, README, demo script, and disclosure file.
-

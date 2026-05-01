@@ -1,5 +1,12 @@
 # Deployment Guide
 
+## Current Preview
+
+- Live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+- Vercel inspect: https://vercel.com/yiwangyuai-7161s-projects/chainagent-radar/GD2dXhhgvmVzfVAG753DHwRH2MxW
+- Status: ready
+- Deployed: 2026-05-02
+
 ## Vercel
 
 This project is a Vite React app and is ready for Vercel deployment.
@@ -43,4 +50,3 @@ After deployment:
 5. Click `Simulate AgentPay`.
 6. Confirm gas limit, gas price, estimated fee, session budget, and policy checks appear.
 7. Click `Copy Markdown` and verify the generated submission pack copies.
-
