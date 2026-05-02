@@ -2,9 +2,9 @@
 
 ## Current Preview
 
-- Live demo: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app
-- BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
-- Vercel inspect: https://vercel.com/yiwangyuai-7161s-projects/chainagent-radar/AN8mQ1HxuBPXcDm4X2UVDz9Kbtxt
+- Live demo: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app
+- BNB contest recording view: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+- Vercel inspect: https://vercel.com/yiwangyuai-7161s-projects/chainagent-radar/9kUrt5LSwKEGr7pYn2QbS84ZHnnD
 - Status: ready
 - Deployed: 2026-05-02
 

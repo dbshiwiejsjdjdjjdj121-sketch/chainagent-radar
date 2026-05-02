@@ -6,7 +6,7 @@ BNB ChainAgent Radar
 
 ## Live Demo
 
-https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 ## GitHub Repository
 

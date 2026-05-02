@@ -6,7 +6,7 @@ Recommended format: screen recording with English voiceover and English subtitle
 
 ## Before Recording
 
-- Open the BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+- Open the BNB contest recording view: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 - Open the GitHub repo in another tab: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 - Use a 16:9 screen size.
 - Do not show private keys, seed phrases, exchange accounts, or personal documents.
@@ -88,6 +88,6 @@ ChainAgent Radar - AI Wallet Intelligence for BNB Chain
 
 ChainAgent Radar is an AI wallet intelligence dashboard for BNB Chain. It uses live BNB Smart Chain RPC data, optional Etherscan API V2 enrichment, and a safe AgentPay simulation to turn wallet activity into a readiness score, risk explanation, and human-approved action plan.
 
-Live demo: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+Live demo: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 GitHub: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar

@@ -6,9 +6,9 @@ ChainAgent Radar turns a BNB Chain wallet address into a live operating brief: n
 
 ## Live Preview
 
-Current Vercel preview: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app
+Current Vercel preview: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app
 
-BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+BNB contest recording view: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 Public GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 
