@@ -10,7 +10,7 @@ AI wallet intelligence for BNB Chain with live RPC analysis, optional indexer en
 
 ## Links
 
-- Live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+- Live demo: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 - GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 - Demo video: pending recording
 
@@ -44,8 +44,8 @@ The AgentPay demo does not request a private key, does not request a signature, 
 
 ## Demo Flow
 
-1. Open the BNB tab.
-2. Click `Run AI brief`.
+1. Open the BNB contest recording view.
+2. Click `Run BNB live brief`.
 3. Show live BNB balance, latest block, and wallet readiness score.
 4. Show optional indexer panel.
 5. Click `Simulate AgentPay`.

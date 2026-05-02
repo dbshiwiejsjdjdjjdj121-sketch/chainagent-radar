@@ -6,7 +6,7 @@ Recommended format: screen recording with English voiceover and English subtitle
 
 ## Before Recording
 
-- Open the live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+- Open the BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 - Open the GitHub repo in another tab: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 - Use a 16:9 screen size.
 - Do not show private keys, seed phrases, exchange accounts, or personal documents.
@@ -30,9 +30,9 @@ For AI agents, this is even more important. An agent should not move funds or ta
 
 Now I will run a live wallet brief.
 
-I keep the BNB tab selected, use the sample wallet address, and click "Run AI brief".
+I open the BNB contest recording view, use the sample wallet address or paste a public BNB wallet, and click "Run BNB live brief".
 
-The app connects to BNB Smart Chain public RPC in real time. It reads the chain ID, latest block, native BNB balance, transaction count, gas price, and wallet status.
+The app connects to BNB Smart Chain public RPC in real time. It reads the chain ID, latest block, native BNB balance, transaction count, gas price, and wallet status. This recording view hides the other hackathon adapters so the demo is clearly a dedicated BNB Hack project.
 
 Then ChainAgent Radar converts that raw data into a readiness score, risk level, and recommended next actions.
 
@@ -72,7 +72,7 @@ Hi, this is ChainAgent Radar, an AI wallet intelligence dashboard for BNB Chain.
 
 It turns a wallet address into a live operating brief with BNB balance, transaction count, latest block, risk level, and recommended next actions.
 
-The app connects to BNB Smart Chain public RPC in real time. When I click "Run AI brief", it reads live chain data and converts raw wallet information into a clear readiness score.
+The app connects to BNB Smart Chain public RPC in real time. When I click "Run BNB live brief", it reads live chain data and converts raw wallet information into a clear readiness score.
 
 Next, I click "Simulate AgentPay". This is only a dry run. It does not sign or broadcast a transaction. It estimates gas and creates a human approval ticket before any future agent action.
 
@@ -88,7 +88,6 @@ ChainAgent Radar - AI Wallet Intelligence for BNB Chain
 
 ChainAgent Radar is an AI wallet intelligence dashboard for BNB Chain. It uses live BNB Smart Chain RPC data, optional Etherscan API V2 enrichment, and a safe AgentPay simulation to turn wallet activity into a readiness score, risk explanation, and human-approved action plan.
 
-Live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+Live demo: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 GitHub: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
-

@@ -6,7 +6,7 @@ BNB ChainAgent Radar
 
 ## Live Demo
 
-https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 ## GitHub Repository
 
@@ -33,9 +33,9 @@ BNB ChainAgent Radar is an AI wallet intelligence dashboard that turns a BNB Sma
 
 ## Demo Script
 
-1. Open the BNB tab.
+1. Open the BNB contest recording view.
 2. Paste a full EVM wallet address or use the public sample wallet.
-3. Click `Run AI brief`.
+3. Click `Run BNB live brief`.
 4. Show the Live RPC banner, BNB balance, latest block, and transaction count.
 5. If an API key is configured, show the indexer panel with ERC-20 transfers, contract methods, top token symbols, and stablecoin-style volume.
 6. Click `Simulate AgentPay`.

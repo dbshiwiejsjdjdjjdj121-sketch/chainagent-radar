@@ -43,12 +43,32 @@ button {
   background-size: 44px 44px;
 }
 
+.contest-shell {
+  grid-template-columns: 260px 1fr;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--eco-accent) 18%, transparent) 0, transparent 32%),
+    radial-gradient(circle at 28% 8%, color-mix(in srgb, var(--eco) 20%, transparent) 0, transparent 26%),
+    linear-gradient(90deg, rgba(112, 90, 26, 0.09) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(112, 90, 26, 0.08) 1px, transparent 1px),
+    #f6f1e5;
+  background-size: auto, auto, 42px 42px, 42px 42px, auto;
+}
+
 .sidebar {
+  min-width: 0;
   min-height: 100vh;
   padding: 28px 20px;
   border-right: 1px solid var(--line);
   background: rgba(251, 250, 246, 0.88);
   backdrop-filter: blur(18px);
+}
+
+.contest-shell .sidebar {
+  border-right-color: rgba(255, 248, 230, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 248, 230, 0.08), transparent 38%),
+    #17120c;
+  color: #fff6df;
 }
 
 .brand-mark {
@@ -61,6 +81,14 @@ button {
 
 .brand-mark svg {
   color: var(--eco);
+}
+
+.contest-shell .brand-mark {
+  border-bottom-color: rgba(255, 248, 230, 0.16);
+}
+
+.contest-shell .brand-mark svg {
+  color: color-mix(in srgb, var(--eco-accent) 70%, #fff6df);
 }
 
 .brand-mark strong,
@@ -82,6 +110,11 @@ button {
   text-transform: uppercase;
 }
 
+.contest-shell .brand-mark span,
+.contest-shell .sidebar-note span {
+  color: rgba(255, 246, 223, 0.58);
+}
+
 .nav-list {
   display: grid;
   gap: 8px;
@@ -99,9 +132,19 @@ button {
   text-decoration: none;
 }
 
+.contest-shell .nav-list a {
+  color: rgba(255, 246, 223, 0.68);
+}
+
 .nav-list a.active,
 .nav-list a:hover {
   background: var(--ink);
+  color: #fffaf1;
+}
+
+.contest-shell .nav-list a.active,
+.contest-shell .nav-list a:hover {
+  background: color-mix(in srgb, var(--eco) 74%, #fff6df);
   color: #fffaf1;
 }
 
@@ -111,6 +154,11 @@ button {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
+}
+
+.contest-shell .sidebar-note {
+  border-color: rgba(255, 248, 230, 0.16);
+  background: rgba(255, 248, 230, 0.07);
 }
 
 .sidebar-note strong {
@@ -124,8 +172,17 @@ button {
   line-height: 1.5;
 }
 
+.contest-shell .sidebar-note p {
+  color: rgba(255, 246, 223, 0.66);
+}
+
 .workspace {
+  min-width: 0;
   padding: 32px;
+}
+
+.contest-shell .workspace {
+  padding: 38px;
 }
 
 .topbar {
@@ -133,7 +190,28 @@ button {
   align-items: start;
   justify-content: space-between;
   gap: 20px;
+  min-width: 0;
   margin-bottom: 24px;
+}
+
+.topbar > div,
+.brand-mark,
+.nav-list,
+.sidebar-note,
+.contest-ribbon > div,
+.recording-banner > div,
+.panel-heading > div {
+  min-width: 0;
+}
+
+.contest-shell .topbar {
+  padding: 28px;
+  border: 1px solid color-mix(in srgb, var(--eco) 28%, var(--line));
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.96), rgba(255, 250, 240, 0.78)),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--eco-accent) 14%, transparent), transparent 38%);
+  box-shadow: 0 28px 80px rgba(33, 24, 12, 0.12);
 }
 
 h1,
@@ -149,6 +227,34 @@ h1 {
   font-size: clamp(36px, 5vw, 72px);
   line-height: 0.95;
   letter-spacing: 0;
+}
+
+.hero-copy {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: clamp(17px, 1.8vw, 22px);
+  line-height: 1.45;
+}
+
+.hero-proof-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hero-proof-strip span {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid color-mix(in srgb, var(--eco) 28%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--eco) 7%, #fffdf8);
+  color: var(--eco);
+  font-size: 13px;
+  font-weight: 900;
 }
 
 h2 {
@@ -171,6 +277,38 @@ h3 {
   border-radius: 8px;
   background: var(--paper);
   color: var(--ink);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.mode-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(251, 250, 246, 0.9);
+}
+
+.mode-toggle button {
+  min-height: 34px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.mode-toggle button.active {
+  background: var(--ink);
+  color: #fffaf1;
 }
 
 .ecosystem-tabs {
@@ -205,6 +343,88 @@ h3 {
   color: var(--muted);
 }
 
+.contest-ribbon,
+.recording-banner {
+  min-width: 0;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(251, 250, 246, 0.9);
+  box-shadow: 0 18px 50px rgba(42, 37, 30, 0.08);
+}
+
+.contest-ribbon {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+  gap: 24px;
+  align-items: center;
+  padding: 20px;
+}
+
+.contest-ribbon span,
+.recording-banner span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.contest-ribbon strong {
+  display: block;
+  margin: 6px 0;
+  font-size: 22px;
+}
+
+.contest-ribbon p,
+.recording-banner p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.contest-ribbon-meta {
+  display: grid;
+  gap: 8px;
+}
+
+.contest-ribbon-meta span,
+.recording-banner > span {
+  min-height: 36px;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--eco) 28%, var(--line));
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--eco) 6%, var(--paper));
+  color: var(--eco);
+}
+
+.recording-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 18px;
+}
+
+.recording-banner strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 18px;
+}
+
+.recording-banner.ready {
+  border-color: color-mix(in srgb, var(--eco-accent) 34%, var(--line));
+}
+
+.recording-banner.warning {
+  border-color: color-mix(in srgb, #b85c45 44%, var(--line));
+}
+
+.recording-banner.warning > span {
+  border-color: color-mix(in srgb, #b85c45 42%, var(--line));
+  background: color-mix(in srgb, #b85c45 8%, var(--paper));
+  color: #9a452d;
+}
+
 .grid-primary {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(280px, 0.72fr);
@@ -221,10 +441,20 @@ h3 {
 
 .panel,
 .submission-band {
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(251, 250, 246, 0.9);
   box-shadow: 0 18px 50px rgba(42, 37, 30, 0.08);
+}
+
+.contest-shell .panel,
+.contest-shell .submission-band,
+.contest-shell .contest-ribbon,
+.contest-shell .recording-banner {
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.92);
+  box-shadow: 0 22px 64px rgba(42, 31, 16, 0.1);
 }
 
 .panel {
@@ -863,11 +1093,22 @@ input {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
+  .topbar,
+  .recording-banner {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .topbar-actions {
+    justify-content: space-between;
+  }
+
   .grid-primary,
   .grid-secondary,
   .agentpay-grid,
   .indexer-grid,
   .blueprint-grid,
+  .contest-ribbon,
   .submission-pack-grid,
   .submission-band {
     grid-template-columns: 1fr;
@@ -877,6 +1118,10 @@ input {
 @media (max-width: 760px) {
   .workspace {
     padding: 20px;
+  }
+
+  .contest-shell .workspace {
+    padding: 14px;
   }
 
   .ecosystem-tabs,
@@ -913,8 +1158,18 @@ input {
     width: 100%;
   }
 
+  .topbar-actions,
+  .mode-toggle {
+    width: 100%;
+  }
+
+  .mode-toggle button {
+    flex: 1;
+  }
+
   h1 {
-    font-size: 42px;
+    font-size: 38px;
+    overflow-wrap: anywhere;
   }
 }
 

@@ -28,6 +28,8 @@ import type { AgentPaymentSimulation, EcosystemId, WalletSnapshot } from "./type
 import { createAnalysis, shortenAddress } from "./utils/analysis";
 import { createSubmissionMarkdown } from "./utils/submissionPack";
 
+type ViewMode = "motherbase" | "contest";
+
 const readiness = [
   { label: "Public repo", done: true },
   { label: "BNB RPC/API", done: true },
@@ -35,6 +37,117 @@ const readiness = [
   { label: "Disclosure", done: true },
   { label: "README", done: true },
 ];
+
+const contestProfiles: Record<
+  EcosystemId,
+  {
+    brand: string;
+    sidebarLabel: string;
+    sidebarNote: string;
+    overline: string;
+    headline: string;
+    heroCopy: string;
+    ribbonCopy: string;
+    panelLabel: string;
+    panelTitle: string;
+    primaryActionLabel: string;
+    recordingNote: string;
+    pitch: string;
+  }
+> = {
+  mantle: {
+    brand: "Mantle ChainAgent",
+    sidebarLabel: "Mantle blueprint",
+    sidebarNote: "Contest-specific shell only. Build Mantle-native data/actions before any final video.",
+    overline: "Mantle recording draft",
+    headline: "Agentic wallet intelligence for Mantle builders.",
+    heroCopy:
+      "A focused Mantle version should turn wallet and yield activity into an AI alpha brief with explicit action budgets.",
+    ribbonCopy: "This mode hides other contests, but Mantle still needs live adapter work before submission.",
+    panelLabel: "Mantle contest draft",
+    panelTitle: "AI alpha brief blueprint",
+    primaryActionLabel: "Refresh Mantle blueprint",
+    recordingNote: "Blueprint only: do not record as a final Mantle submission until a native Mantle integration is added.",
+    pitch:
+      "ChainAgent Radar for Mantle explains wallet behavior, yield exposure, and agent action confidence in one sponsor-specific operating brief.",
+  },
+  qie: {
+    brand: "QIE ChainAgent",
+    sidebarLabel: "QIE blueprint",
+    sidebarNote: "Contest-specific shell only. Add QIE-native SDK/API proof before recording.",
+    overline: "QIE recording draft",
+    headline: "QIE wallet actions, translated into an AI operating brief.",
+    heroCopy:
+      "A focused QIE version should guide wallet, pass, stable, and DEX actions without leaking BNB demo data into the submission.",
+    ribbonCopy: "This mode is ready for copy/story review, but the QIE adapter still needs real ecosystem calls.",
+    panelLabel: "QIE contest draft",
+    panelTitle: "QIE wallet action blueprint",
+    primaryActionLabel: "Refresh QIE blueprint",
+    recordingNote: "Blueprint only: use this for planning, not final submission, until QIE-native integration is live.",
+    pitch:
+      "ChainAgent Radar for QIE packages wallet readiness, QIE ecosystem actions, and disclosure into a judge-friendly submission brief.",
+  },
+  bnb: {
+    brand: "BNB ChainAgent",
+    sidebarLabel: "BNB recording build",
+    sidebarNote: "Contest-ready view. Other ecosystems are hidden so the demo reads as a dedicated BNB Hack project.",
+    overline: "BNB Hack: Online Edition",
+    headline: "BNB wallet intelligence with an approval-safe AI agent.",
+    heroCopy:
+      "A single-purpose BNB demo with live BSC RPC, optional indexer enrichment, and a dry-run AgentPay ticket that never asks for a signature.",
+    ribbonCopy: "This is the version to record first: BNB-only copy, BNB-only proof, and a BNB submission pack.",
+    panelLabel: "BNB live demo",
+    panelTitle: "Live wallet brief + safety gate",
+    primaryActionLabel: "Run BNB live brief",
+    recordingNote:
+      "Recording-safe: run the live brief, simulate AgentPay, then copy the BNB submission pack. No unrelated contests appear in this mode.",
+    pitch:
+      "BNB ChainAgent Radar turns a BNB wallet into a live readiness score, risk explanation, and human-approved agent action plan.",
+  },
+  hackindia: {
+    brand: "Sharp ChainAgent",
+    sidebarLabel: "Sharp blueprint",
+    sidebarNote: "Contest-specific shell only. Confirm eligibility and token utility requirements before recording.",
+    overline: "HackIndia Web3 draft",
+    headline: "Sharp Token utility, explained as wallet intelligence.",
+    heroCopy:
+      "A focused Sharp version should show earn, spend, buy, and credential flows with clear token-utility disclosure.",
+    ribbonCopy: "This mode frames the Sharp story, but it is still a blueprint until the required SDK/token actions are live.",
+    panelLabel: "Sharp contest draft",
+    panelTitle: "Token utility blueprint",
+    primaryActionLabel: "Refresh Sharp blueprint",
+    recordingNote: "Blueprint only: do not record as final until Sharp-specific integration and eligibility are confirmed.",
+    pitch:
+      "ChainAgent Radar for Sharp converts token utility and credential actions into a simple AI operating brief for Web3 judges.",
+  },
+};
+
+function readContestParam(): EcosystemId | null {
+  if (typeof window === "undefined") return null;
+
+  const value = new URLSearchParams(window.location.search).get("contest");
+  return ecosystems.some((item) => item.id === value) ? (value as EcosystemId) : null;
+}
+
+function createInitialEcosystemId(): EcosystemId {
+  return readContestParam() ?? "bnb";
+}
+
+function createInitialViewMode(): ViewMode {
+  return readContestParam() ? "contest" : "motherbase";
+}
+
+function syncViewUrl(viewMode: ViewMode, targetId: EcosystemId) {
+  if (typeof window === "undefined") return;
+
+  const url = new URL(window.location.href);
+  if (viewMode === "contest") {
+    url.searchParams.set("contest", targetId);
+  } else {
+    url.searchParams.delete("contest");
+  }
+  window.history.replaceState(null, "", url);
+}
 
 function createContestSnapshot(sourceLabel: string): WalletSnapshot {
   return {
@@ -81,7 +194,8 @@ function createInitialSimulations(): Record<EcosystemId, AgentPaymentSimulation 
 }
 
 function App() {
-  const [ecosystemId, setEcosystemId] = useState<EcosystemId>("bnb");
+  const [ecosystemId, setEcosystemId] = useState<EcosystemId>(createInitialEcosystemId);
+  const [viewMode, setViewMode] = useState<ViewMode>(createInitialViewMode);
   const [addressesByEcosystem, setAddressesByEcosystem] = useState<Record<EcosystemId, string>>(createInitialAddresses);
   const [snapshotsByEcosystem, setSnapshotsByEcosystem] = useState<Record<EcosystemId, WalletSnapshot>>(createInitialSnapshots);
   const [statusByEcosystem, setStatusByEcosystem] = useState<Record<EcosystemId, string>>(createInitialStatusMessages);
@@ -92,6 +206,9 @@ function App() {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
 
   const ecosystem = ecosystems.find((item) => item.id === ecosystemId) ?? ecosystems[0];
+  const contestProfile = contestProfiles[ecosystem.id];
+  const isContestMode = viewMode === "contest";
+  const isRecordingReady = isContestMode && ecosystem.adapterStatus === "ready";
   const address = addressesByEcosystem[ecosystemId];
   const snapshot = snapshotsByEcosystem[ecosystemId];
   const statusMessage = statusByEcosystem[ecosystemId];
@@ -104,6 +221,18 @@ function App() {
     () => createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }),
     [analysis, ecosystem, simulation, snapshot],
   );
+
+  function changeViewMode(nextMode: ViewMode) {
+    setViewMode(nextMode);
+    syncViewUrl(nextMode, ecosystemId);
+  }
+
+  function selectEcosystem(nextId: EcosystemId) {
+    setEcosystemId(nextId);
+    if (viewMode === "contest") {
+      syncViewUrl("contest", nextId);
+    }
+  }
 
   function updateAddress(targetId: EcosystemId, nextAddress: string) {
     setAddressesByEcosystem((current) => ({ ...current, [targetId]: nextAddress }));
@@ -291,22 +420,25 @@ function App() {
   const completed = readiness.filter((item) => item.done).length;
 
   return (
-    <main className="app-shell" style={{ "--eco": ecosystem.primaryColor, "--eco-accent": ecosystem.accentColor } as CSSProperties}>
+    <main
+      className={isContestMode ? "app-shell contest-shell" : "app-shell"}
+      style={{ "--eco": ecosystem.primaryColor, "--eco-accent": ecosystem.accentColor } as CSSProperties}
+    >
       <aside className="sidebar" aria-label="Project navigation">
         <div className="brand-mark">
           <Radar size={26} />
           <div>
-            <strong>ChainAgent</strong>
-            <span>Prize Ops Console</span>
+            <strong>{isContestMode ? contestProfile.brand : "ChainAgent"}</strong>
+            <span>{isContestMode ? contestProfile.sidebarLabel : "Prize Ops Console"}</span>
           </div>
         </div>
 
         <nav className="nav-list">
           <a className="active" href="#radar">
-            <Activity size={18} /> Radar
+            <Activity size={18} /> {isContestMode ? "Live Brief" : "Radar"}
           </a>
           <a href="#actions">
-            <Sparkles size={18} /> Actions
+            <Sparkles size={18} /> {isContestMode ? "Proof" : "Actions"}
           </a>
           <a href="#submission">
             <ClipboardCheck size={18} /> Submission
@@ -314,43 +446,90 @@ function App() {
         </nav>
 
         <div className="sidebar-note">
-          <span>Current batch</span>
-          <strong>Mantle to QIE to BNB</strong>
-          <p>One motherbase, separate contest-specific integrations and disclosures.</p>
+          <span>{isContestMode ? "Recording mode" : "Current batch"}</span>
+          <strong>{isContestMode ? ecosystem.contest : "Mantle to QIE to BNB"}</strong>
+          <p>{isContestMode ? contestProfile.sidebarNote : "One motherbase, separate contest-specific integrations and disclosures."}</p>
         </div>
       </aside>
 
       <section className="workspace">
         <header className="topbar">
           <div>
-            <p className="section-label">Online Web3 prize machine</p>
-            <h1>AI wallet intelligence, rebuilt per sponsor.</h1>
+            <p className="section-label">{isContestMode ? contestProfile.overline : "Online Web3 prize machine"}</p>
+            <h1>{isContestMode ? contestProfile.headline : "AI wallet intelligence, rebuilt per sponsor."}</h1>
+            <p className="hero-copy">
+              {isContestMode
+                ? contestProfile.heroCopy
+                : "The motherbase is for internal prize operations. Each final hackathon submission gets a focused contest view, unique copy, and honest disclosure."}
+            </p>
+            {isContestMode ? (
+              <div className="hero-proof-strip" aria-label="Contest proof points">
+                <span>{ecosystem.chainLabel}</span>
+                <span>{ecosystem.prizeShape}</span>
+                <span>{ecosystem.adapterStatus === "ready" ? "Live adapter" : "Adapter blueprint"}</span>
+              </div>
+            ) : null}
           </div>
-          <button className="icon-button" type="button" onClick={runAnalysis} aria-label="Refresh analysis">
-            <RefreshCw size={18} />
-          </button>
+          <div className="topbar-actions">
+            <div className="mode-toggle" aria-label="View mode">
+              <button className={!isContestMode ? "active" : ""} type="button" onClick={() => changeViewMode("motherbase")}>
+                Motherbase
+              </button>
+              <button className={isContestMode ? "active" : ""} type="button" onClick={() => changeViewMode("contest")}>
+                Contest demo
+              </button>
+            </div>
+            <button className="icon-button" type="button" onClick={runAnalysis} aria-label="Refresh analysis">
+              <RefreshCw size={18} />
+            </button>
+          </div>
         </header>
 
-        <section className="ecosystem-tabs" aria-label="Ecosystem selector">
-          {ecosystems.map((item) => (
-            <button
-              key={item.id}
-              className={item.id === ecosystem.id ? "selected" : ""}
-              type="button"
-              onClick={() => setEcosystemId(item.id)}
-            >
-              <span>{item.name}</span>
-              <small>{item.deadline}</small>
-            </button>
-          ))}
-        </section>
+        {isContestMode ? (
+          <section className="contest-ribbon" aria-label={`${ecosystem.name} contest mode`}>
+            <div>
+              <span>Contest demo mode</span>
+              <strong>{ecosystem.contest}</strong>
+              <p>{contestProfile.ribbonCopy}</p>
+            </div>
+            <div className="contest-ribbon-meta">
+              <span>{ecosystem.deadline}</span>
+              <span>{ecosystem.track}</span>
+              <span>{ecosystem.adapterStatus}</span>
+            </div>
+          </section>
+        ) : (
+          <section className="ecosystem-tabs" aria-label="Ecosystem selector">
+            {ecosystems.map((item) => (
+              <button
+                key={item.id}
+                className={item.id === ecosystem.id ? "selected" : ""}
+                type="button"
+                onClick={() => selectEcosystem(item.id)}
+              >
+                <span>{item.name}</span>
+                <small>{item.deadline}</small>
+              </button>
+            ))}
+          </section>
+        )}
+
+        {isContestMode ? (
+          <section className={isRecordingReady ? "recording-banner ready" : "recording-banner warning"}>
+            <div>
+              <strong>{isRecordingReady ? "Recording-safe contest view" : "Blueprint only, not final yet"}</strong>
+              <p>{contestProfile.recordingNote}</p>
+            </div>
+            <span>{isRecordingReady ? "Demo-ready" : "Needs live adapter"}</span>
+          </section>
+        ) : null}
 
         <section className="grid-primary" id="radar">
           <article className="panel analysis-panel">
             <div className="panel-heading">
               <div>
-                <p className="section-label">{ecosystem.contest}</p>
-                <h2>{ecosystem.track}</h2>
+                <p className="section-label">{isContestMode ? contestProfile.panelLabel : ecosystem.contest}</p>
+                <h2>{isContestMode ? contestProfile.panelTitle : ecosystem.track}</h2>
               </div>
               <span className="status-chip">{ecosystem.adapterStatus}</span>
             </div>
@@ -384,11 +563,15 @@ function App() {
                 <small>readiness</small>
               </div>
               <div>
-                <h3>{shortenAddress(snapshot.address)} is demo-ready for {ecosystem.name}</h3>
+                <h3>
+                  {isContestMode
+                    ? `${shortenAddress(snapshot.address)} powers the ${ecosystem.name} judge demo`
+                    : `${shortenAddress(snapshot.address)} is demo-ready for ${ecosystem.name}`}
+                </h3>
                 <p>{analysis.summary}</p>
                 <button className="primary-action" type="button" onClick={runAnalysis} disabled={isAnalyzing}>
                   {isAnalyzing ? <RefreshCw size={17} /> : <Sparkles size={17} />}
-                  {isAnalyzing ? "Analyzing" : ecosystem.rpcTarget ? "Run AI brief" : "Refresh blueprint"}
+                  {isAnalyzing ? "Analyzing" : isContestMode ? contestProfile.primaryActionLabel : ecosystem.rpcTarget ? "Run AI brief" : "Refresh blueprint"}
                 </button>
               </div>
             </div>
@@ -683,10 +866,7 @@ function App() {
           <div className="submission-pack-grid">
             <div className="submission-summary">
               <h3>What to say in 15 seconds</h3>
-              <p>
-                ChainAgent Radar turns {ecosystem.name} wallet and ecosystem data into a contest-specific AI operating brief,
-                then packages the demo flow, integration notes, and disclosure for submission.
-              </p>
+              <p>{isContestMode ? contestProfile.pitch : `ChainAgent Radar turns ${ecosystem.name} wallet and ecosystem data into a contest-specific AI operating brief, then packages the demo flow, integration notes, and disclosure for submission.`}</p>
             </div>
             <div className="submission-checks">
               <span>Live RPC: {isLiveRpc ? "ready" : ecosystem.rpcTarget ? "run brief" : "not applicable"}</span>

@@ -6,7 +6,9 @@ ChainAgent Radar turns a BNB Chain wallet address into a live operating brief: n
 
 ## Live Preview
 
-Current Vercel preview: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
+Current Vercel preview: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app
+
+BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
 Public GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 
@@ -35,12 +37,13 @@ Do not record or submit the motherbase view as-is. Each final contest submission
 - Copy-ready BNB submission pack generated from the current wallet, risk, indexer, and AgentPay state.
 - Sponsor-specific action cards for BNB, Mantle, QIE, and Sharp/HackIndia adaptations.
 - Isolated per-contest state so BNB live RPC data and AgentPay simulations do not leak into QIE, Mantle, or Sharp/HackIndia blueprint views.
+- `?contest=bnb` recording mode that hides unrelated contests and presents the project as a dedicated BNB Hack submission.
 
 ## Demo Flow
 
-1. Open the BNB tab.
+1. Open the BNB contest recording view: `/?contest=bnb`.
 2. Paste a full EVM address or keep the sample wallet.
-3. Click `Run AI brief`.
+3. Click `Run BNB live brief`.
 4. Review live BNB balance, latest block, readiness score, risk level, and sponsor actions.
 5. Click `Simulate AgentPay`.
 6. Review gas limit, gas price, estimated fee, session budget, and policy checks.

@@ -2,8 +2,9 @@
 
 ## Current Preview
 
-- Live demo: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
-- Vercel inspect: https://vercel.com/yiwangyuai-7161s-projects/chainagent-radar/GD2dXhhgvmVzfVAG753DHwRH2MxW
+- Live demo: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app
+- BNB contest recording view: https://chainagent-radar-9kkabd78h-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+- Vercel inspect: https://vercel.com/yiwangyuai-7161s-projects/chainagent-radar/AN8mQ1HxuBPXcDm4X2UVDz9Kbtxt
 - Status: ready
 - Deployed: 2026-05-02
 
@@ -43,9 +44,9 @@ Important: Vite client-side env vars are visible in the browser bundle. For a ha
 
 After deployment:
 
-1. Open the public Vercel URL.
-2. Keep the BNB tab selected.
-3. Click `Run AI brief`.
+1. Open the BNB contest recording URL: `/?contest=bnb`.
+2. Confirm the page says `Recording-safe contest view`.
+3. Click `Run BNB live brief`.
 4. Confirm `Live RPC` appears with a latest block and BNB balance.
 5. Click `Simulate AgentPay`.
 6. Confirm gas limit, gas price, estimated fee, session budget, and policy checks appear.
