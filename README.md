@@ -8,6 +8,8 @@ ChainAgent Radar turns a BNB Chain wallet address into a live operating brief: n
 
 Current Vercel preview: https://chainagent-radar-5q5euc7w4-yiwangyuai-7161s-projects.vercel.app
 
+Public GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
+
 ## Hackathon Focus
 
 Current primary target: **BNB Hack: Online Edition**.
