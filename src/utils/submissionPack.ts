@@ -13,19 +13,28 @@ function list(items: string[]) {
 }
 
 export function createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }: SubmissionPackInput) {
+  const hasLiveRpc = Boolean(ecosystem.rpcTarget && snapshot.source === "live-rpc");
+  const projectName = ecosystem.id === "bnb" ? "BNB ChainAgent Radar" : `ChainAgent Radar for ${ecosystem.name}`;
   const liveData = [
     `Data source: ${snapshot.sourceLabel}`,
     `Wallet: ${snapshot.address}`,
     `Readiness score: ${analysis.score}/100`,
     `Risk level: ${analysis.riskLevel}`,
-    `BNB balance: ${snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "not synced"}`,
-    `Latest block: ${snapshot.blockNumber?.toLocaleString() ?? "not synced"}`,
+    `Native balance: ${hasLiveRpc && snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "not synced"}`,
+    `Latest block: ${hasLiveRpc ? snapshot.blockNumber?.toLocaleString() ?? "not synced" : "not synced"}`,
     `Transactions: ${snapshot.txCount.toLocaleString()}`,
     `Indexer status: ${snapshot.indexerStatus ?? "not configured"}`,
     `Token transfers: ${(snapshot.tokenTransferCount ?? 0).toLocaleString()}`,
     `Contract methods: ${(snapshot.contractInteractionCount ?? 0).toLocaleString()}`,
   ];
-  const agentPay = simulation
+  const adapterPlan = [
+    `Contest: ${ecosystem.contest}`,
+    `Track: ${ecosystem.track}`,
+    `Chain target: ${ecosystem.chainLabel}`,
+    `Adapter status: ${ecosystem.adapterStatus}`,
+    `Required next integration: ecosystem-native SDK/API calls before final recording`,
+  ];
+  const agentPay = ecosystem.rpcTarget && simulation
     ? [
         `Simulation status: ${simulation.status}`,
         `Dry-run amount: ${simulation.amountNative} ${simulation.nativeSymbol}`,
@@ -35,29 +44,33 @@ export function createSubmissionMarkdown({ ecosystem, snapshot, analysis, simula
         `Session budget: ${simulation.sessionBudgetNative} ${simulation.nativeSymbol}`,
         `Approval required: ${simulation.approvalRequired ? "yes" : "no"}`,
       ]
-    : ["Run the AgentPay simulation before recording the final demo."];
-  const policyChecks = simulation
+    : ecosystem.rpcTarget
+      ? ["Run the AgentPay simulation before recording the final BNB demo."]
+      : ["No live AgentPay simulator is enabled for this contest adapter yet.", ...adapterPlan];
+  const policyChecks = ecosystem.rpcTarget && simulation
     ? simulation.policyChecks.map((check) => `${check.passed ? "[pass]" : "[block]"} ${check.label}`)
-    : ["[pending] AgentPay policy checks not generated yet."];
+    : ecosystem.rpcTarget
+      ? ["[pending] AgentPay policy checks not generated yet."]
+      : ["[pending] Replace blueprint with a live contest-specific action before final submission."];
 
-  return `# BNB ChainAgent Radar
+  return `# ${projectName}
 
 ## Short Description
 
-BNB ChainAgent Radar is an AI wallet intelligence dashboard for BNB Chain. It turns a wallet address into a live operating brief with RPC data, optional Etherscan V2 indexer enrichment, risk signals, sponsor-specific next actions, and an AgentPay approval simulation.
+${projectName} is an AI wallet intelligence dashboard for ${ecosystem.name}. It turns wallet and ecosystem activity into a contest-specific operating brief with risk signals, sponsor-specific next actions, and a clear submission pack.
 
 ## Problem
 
-Web3 users and builders can see raw wallet data, but they often cannot quickly decide what is safe, what is actionable, and how an AI agent should operate without overstepping. ChainAgent Radar converts wallet and transaction data into a clear, judge-friendly action brief.
+Web3 users and builders can see raw wallet data, but they often cannot quickly decide what is safe, what is actionable, and how an AI agent should operate without overstepping. ChainAgent Radar converts wallet and transaction data into a clear, judge-friendly action brief for ${ecosystem.contest}.
 
 ## Live Demo Flow
 
-1. Open the BNB tab.
+1. Open the ${ecosystem.name} tab.
 2. Paste or keep the sample wallet ${shortenAddress(snapshot.address)}.
-3. Click \`Run AI brief\` to sync live BNB RPC data.
-4. Review wallet score, risk level, balance, latest block, token/indexer status, and recommended actions.
-5. Click \`Simulate AgentPay\` to estimate gas and produce a human-approval ticket.
-6. Explain that no private key is requested and no transaction is broadcast.
+3. Click \`${ecosystem.rpcTarget ? "Run AI brief" : "Refresh blueprint"}\`.
+4. Review wallet score, risk level, sponsor hooks, adapter status, and recommended actions.
+5. ${ecosystem.rpcTarget ? "Click `Simulate AgentPay` to estimate gas and produce a human-approval ticket." : "Explain the adapter blueprint and what must become live before the final contest video."}
+6. Explain the honest scope disclosure and next integration milestone.
 
 ## Current Integration
 
@@ -87,7 +100,8 @@ ${list(analysis.nextActions)}
 
 ## Honest Scope Disclosure
 
-This demo uses live BNB RPC data and optional Etherscan API V2 enrichment. The AgentPay flow is a dry-run approval simulation only: it estimates gas and checks policy rules, but does not sign or broadcast transactions. Production deployment should proxy indexer calls through a backend and move real signing to testnet-only safeguards first.
+${ecosystem.rpcTarget
+    ? "This demo uses live BNB RPC data and optional Etherscan API V2 enrichment. The AgentPay flow is a dry-run approval simulation only: it estimates gas and checks policy rules, but does not sign or broadcast transactions. Production deployment should proxy indexer calls through a backend and move real signing to testnet-only safeguards first."
+    : `This is a ${ecosystem.name} contest blueprint inside the ChainAgent Radar motherbase. It must receive a live ${ecosystem.chainLabel} integration, contest-specific README, and dedicated demo video before final submission.`}
 `;
 }
-

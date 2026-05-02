@@ -16,6 +16,15 @@ Current primary target: **BNB Hack: Online Edition**.
 
 The project is designed as a reusable Web3 prize motherbase. BNB is the first live version; Mantle, QIE, and Sharp/HackIndia can receive separate contest-specific versions with new integrations and disclosures.
 
+## Motherbase Rule
+
+This repository has two roles:
+
+- Motherbase mode: internal operating console for tracking BNB, Mantle, QIE, and Sharp/HackIndia adapters.
+- Contest mode: single-event public demo version for one hackathon at a time.
+
+Do not record or submit the motherbase view as-is. Each final contest submission should hide unrelated ecosystems, use contest-specific copy, include only relevant integrations, and receive its own demo script and disclosure.
+
 ## What Works Now
 
 - Live BNB Smart Chain public RPC sync for a pasted EVM address.
@@ -25,6 +34,7 @@ The project is designed as a reusable Web3 prize motherbase. BNB is the first li
 - Human-approval policy ticket before any future transaction path.
 - Copy-ready BNB submission pack generated from the current wallet, risk, indexer, and AgentPay state.
 - Sponsor-specific action cards for BNB, Mantle, QIE, and Sharp/HackIndia adaptations.
+- Isolated per-contest state so BNB live RPC data and AgentPay simulations do not leak into QIE, Mantle, or Sharp/HackIndia blueprint views.
 
 ## Demo Flow
 

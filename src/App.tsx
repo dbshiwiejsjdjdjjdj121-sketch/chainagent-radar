@@ -29,38 +29,110 @@ import { createAnalysis, shortenAddress } from "./utils/analysis";
 import { createSubmissionMarkdown } from "./utils/submissionPack";
 
 const readiness = [
-  { label: "Public repo", done: false },
+  { label: "Public repo", done: true },
   { label: "BNB RPC/API", done: true },
   { label: "Demo video", done: false },
   { label: "Disclosure", done: true },
   { label: "README", done: true },
 ];
 
+function createContestSnapshot(sourceLabel: string): WalletSnapshot {
+  return {
+    ...sampleSnapshot,
+    source: "demo",
+    sourceLabel,
+  };
+}
+
+function createInitialSnapshots(): Record<EcosystemId, WalletSnapshot> {
+  return {
+    mantle: createContestSnapshot("Mantle contest demo snapshot"),
+    qie: createContestSnapshot("QIE contest demo snapshot"),
+    bnb: createContestSnapshot("BNB demo snapshot"),
+    hackindia: createContestSnapshot("Sharp contest demo snapshot"),
+  };
+}
+
+function createInitialAddresses(): Record<EcosystemId, string> {
+  return {
+    mantle: sampleSnapshot.address,
+    qie: sampleSnapshot.address,
+    bnb: sampleSnapshot.address,
+    hackindia: sampleSnapshot.address,
+  };
+}
+
+function createInitialStatusMessages(): Record<EcosystemId, string> {
+  return {
+    mantle: "Mantle blueprint loaded. Live adapter work stays isolated until the contest version is built.",
+    qie: "QIE blueprint loaded. No BNB live data is reused in this contest view.",
+    bnb: "Demo snapshot loaded. Run the BNB brief to sync live public RPC data.",
+    hackindia: "Sharp blueprint loaded. Eligibility and SDK work stay isolated from other contests.",
+  };
+}
+
+function createInitialSimulations(): Record<EcosystemId, AgentPaymentSimulation | null> {
+  return {
+    mantle: null,
+    qie: null,
+    bnb: null,
+    hackindia: null,
+  };
+}
+
 function App() {
   const [ecosystemId, setEcosystemId] = useState<EcosystemId>("bnb");
-  const [address, setAddress] = useState(sampleSnapshot.address);
-  const [snapshot, setSnapshot] = useState<WalletSnapshot>(sampleSnapshot);
+  const [addressesByEcosystem, setAddressesByEcosystem] = useState<Record<EcosystemId, string>>(createInitialAddresses);
+  const [snapshotsByEcosystem, setSnapshotsByEcosystem] = useState<Record<EcosystemId, WalletSnapshot>>(createInitialSnapshots);
+  const [statusByEcosystem, setStatusByEcosystem] = useState<Record<EcosystemId, string>>(createInitialStatusMessages);
+  const [simulationsByEcosystem, setSimulationsByEcosystem] =
+    useState<Record<EcosystemId, AgentPaymentSimulation | null>>(createInitialSimulations);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
-  const [simulation, setSimulation] = useState<AgentPaymentSimulation | null>(null);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
-  const [statusMessage, setStatusMessage] = useState("Demo snapshot loaded. Select BNB and run the brief to sync live public RPC data.");
-  const deferredAddress = useDeferredValue(address);
 
   const ecosystem = ecosystems.find((item) => item.id === ecosystemId) ?? ecosystems[0];
+  const address = addressesByEcosystem[ecosystemId];
+  const snapshot = snapshotsByEcosystem[ecosystemId];
+  const statusMessage = statusByEcosystem[ecosystemId];
+  const simulation = simulationsByEcosystem[ecosystemId];
+  const deferredAddress = useDeferredValue(address);
+  const isLiveRpc = Boolean(ecosystem.rpcTarget && snapshot.source === "live-rpc");
+  const hasLiveAgentPay = Boolean(ecosystem.rpcTarget);
   const analysis = useMemo(() => createAnalysis(ecosystem, snapshot), [ecosystem, snapshot]);
   const submissionMarkdown = useMemo(
     () => createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }),
     [analysis, ecosystem, simulation, snapshot],
   );
 
+  function updateAddress(targetId: EcosystemId, nextAddress: string) {
+    setAddressesByEcosystem((current) => ({ ...current, [targetId]: nextAddress }));
+  }
+
+  function updateSnapshot(targetId: EcosystemId, nextSnapshot: WalletSnapshot | ((current: WalletSnapshot) => WalletSnapshot)) {
+    setSnapshotsByEcosystem((current) => ({
+      ...current,
+      [targetId]: typeof nextSnapshot === "function" ? nextSnapshot(current[targetId]) : nextSnapshot,
+    }));
+  }
+
+  function updateStatus(targetId: EcosystemId, nextStatus: string) {
+    setStatusByEcosystem((current) => ({ ...current, [targetId]: nextStatus }));
+  }
+
+  function updateSimulation(targetId: EcosystemId, nextSimulation: AgentPaymentSimulation | null) {
+    setSimulationsByEcosystem((current) => ({ ...current, [targetId]: nextSimulation }));
+  }
+
   async function connectWallet() {
+    const activeId = ecosystemId;
+
     if (!window.ethereum) {
       startTransition(() => {
-        setAddress(sampleSnapshot.address);
-        setSnapshot(sampleSnapshot);
+        updateAddress(activeId, sampleSnapshot.address);
+        updateSnapshot(activeId, (current) => ({ ...current, address: sampleSnapshot.address }));
       });
-      setStatusMessage("MetaMask was not detected, so the public sample wallet stayed loaded.");
+      updateStatus(activeId, "MetaMask was not detected, so the public sample wallet stayed loaded.");
       return;
     }
 
@@ -68,25 +140,35 @@ function App() {
       const accounts = await window.ethereum.request<string[]>({ method: "eth_requestAccounts" });
       const connected = accounts[0] ?? sampleSnapshot.address;
       startTransition(() => {
-        setAddress(connected);
-        setSnapshot({ ...sampleSnapshot, address: connected });
+        updateAddress(activeId, connected);
+        updateSnapshot(activeId, (current) => ({ ...current, address: connected }));
       });
-      setStatusMessage("Wallet address connected. Run the AI brief to fetch live RPC data when the BNB tab is selected.");
+      updateStatus(activeId, "Wallet address connected. Run this contest brief when the selected adapter is ready.");
     } catch (error) {
-      setStatusMessage(error instanceof Error ? error.message : "Wallet connection was cancelled.");
+      updateStatus(activeId, error instanceof Error ? error.message : "Wallet connection was cancelled.");
     }
   }
 
   async function runAnalysis() {
+    const activeId = ecosystemId;
+    const activeEcosystem = ecosystem;
+    const activeAddress = deferredAddress || addressesByEcosystem[activeId] || sampleSnapshot.address;
+
     setIsAnalyzing(true);
-    setStatusMessage(ecosystem.rpcTarget ? `Syncing ${ecosystem.rpcTarget.name} public RPC data...` : `Refreshing ${ecosystem.name} demo analysis...`);
+    updateStatus(
+      activeId,
+      activeEcosystem.rpcTarget
+        ? `Syncing ${activeEcosystem.rpcTarget.name} public RPC data...`
+        : `Refreshing ${activeEcosystem.name} contest blueprint...`,
+    );
 
     try {
-      if (ecosystem.rpcTarget) {
-        const liveSnapshot = await fetchBnbWalletSnapshot(deferredAddress || sampleSnapshot.address, ecosystem.rpcTarget);
-        setAddress(liveSnapshot.address);
-        setSnapshot(liveSnapshot);
-        setStatusMessage(
+      if (activeEcosystem.rpcTarget) {
+        const liveSnapshot = await fetchBnbWalletSnapshot(activeAddress, activeEcosystem.rpcTarget);
+        updateAddress(activeId, liveSnapshot.address);
+        updateSnapshot(activeId, liveSnapshot);
+        updateStatus(
+          activeId,
           `Live RPC synced in ${liveSnapshot.rpcLatencyMs}ms at block ${liveSnapshot.blockNumber?.toLocaleString()}. ${liveSnapshot.indexerMessage ?? ""}`,
         );
         return;
@@ -94,41 +176,47 @@ function App() {
 
       await new Promise<void>((resolve) => window.setTimeout(resolve, 520));
       startTransition(() => {
-        setSnapshot((current) => ({
+        updateSnapshot(activeId, (current) => ({
           ...current,
-          address: deferredAddress || sampleSnapshot.address,
+          address: activeAddress,
+          source: "demo",
           txCount: current.txCount + 3,
           activeDays: current.activeDays + 1,
           stableVolume: current.stableVolume + 420,
         }));
       });
-      setStatusMessage(`${ecosystem.name} demo analysis refreshed. Live SDK work is still gated until this contest adapter is confirmed.`);
+      updateStatus(activeId, `${activeEcosystem.name} blueprint refreshed. Live SDK work is still gated until this contest adapter is confirmed.`);
     } catch (error) {
-      setStatusMessage(error instanceof Error ? error.message : "Analysis failed. Try again or switch to demo mode.");
+      updateStatus(activeId, error instanceof Error ? error.message : "Analysis failed. Try again or switch to demo mode.");
     } finally {
       setIsAnalyzing(false);
     }
   }
 
   async function runPaymentSimulation() {
-    if (!ecosystem.rpcTarget) {
-      setSimulation(null);
-      setStatusMessage(`${ecosystem.name} does not have a live RPC payment simulator yet.`);
+    const activeId = ecosystemId;
+    const activeEcosystem = ecosystem;
+    const activeSnapshot = snapshotsByEcosystem[activeId];
+    const activeAddress = deferredAddress || addressesByEcosystem[activeId] || activeSnapshot.address;
+
+    if (!activeEcosystem.rpcTarget) {
+      updateSimulation(activeId, null);
+      updateStatus(activeId, `${activeEcosystem.name} does not have a live RPC payment simulator yet.`);
       return;
     }
 
     setIsSimulating(true);
 
     try {
-      const simulated = await simulateBnbAgentPayment(deferredAddress || snapshot.address, ecosystem.rpcTarget);
-      setSimulation(simulated);
+      const simulated = await simulateBnbAgentPayment(activeAddress, activeEcosystem.rpcTarget);
+      updateSimulation(activeId, simulated);
     } catch (error) {
-      setSimulation({
+      updateSimulation(activeId, {
         status: "blocked",
-        from: deferredAddress || snapshot.address,
-        to: deferredAddress || snapshot.address,
+        from: activeAddress,
+        to: activeAddress,
         amountNative: "0.01",
-        nativeSymbol: ecosystem.rpcTarget.nativeSymbol,
+        nativeSymbol: activeEcosystem.rpcTarget.nativeSymbol,
         gasLimit: 0,
         gasPriceGwei: "0",
         estimatedFeeNative: "0",
@@ -154,12 +242,49 @@ function App() {
 
   async function copySubmissionPack() {
     try {
-      await navigator.clipboard.writeText(submissionMarkdown);
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(submissionMarkdown);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = submissionMarkdown;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        if (!copied) {
+          throw new Error("Clipboard fallback failed.");
+        }
+      }
       setCopyState("copied");
       window.setTimeout(() => setCopyState("idle"), 1800);
     } catch {
-      setCopyState("failed");
-      window.setTimeout(() => setCopyState("idle"), 2200);
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = submissionMarkdown;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        const copied = document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        if (!copied) {
+          throw new Error("Clipboard fallback failed.");
+        }
+
+        setCopyState("copied");
+        window.setTimeout(() => setCopyState("idle"), 1800);
+      } catch {
+        setCopyState("failed");
+        window.setTimeout(() => setCopyState("idle"), 2200);
+      }
     }
   }
 
@@ -236,15 +361,15 @@ function App() {
                 <input
                   id="wallet-address"
                   value={address}
-                  onChange={(event) => setAddress(event.target.value)}
+                  onChange={(event) => updateAddress(ecosystemId, event.target.value)}
                   placeholder="0x..."
                 />
                 <button type="button" onClick={connectWallet}>
                   <Wallet size={17} /> Connect
                 </button>
               </div>
-              <div className={snapshot.source === "live-rpc" ? "source-banner live" : "source-banner"}>
-                <strong>{snapshot.source === "live-rpc" ? "Live RPC" : "Demo mode"}</strong>
+              <div className={isLiveRpc ? "source-banner live" : "source-banner"}>
+                <strong>{isLiveRpc ? "Live RPC" : ecosystem.rpcTarget ? "Demo mode" : "Adapter blueprint"}</strong>
                 <span>{statusMessage}</span>
               </div>
             </div>
@@ -263,7 +388,7 @@ function App() {
                 <p>{analysis.summary}</p>
                 <button className="primary-action" type="button" onClick={runAnalysis} disabled={isAnalyzing}>
                   {isAnalyzing ? <RefreshCw size={17} /> : <Sparkles size={17} />}
-                  {isAnalyzing ? "Analyzing" : "Run AI brief"}
+                  {isAnalyzing ? "Analyzing" : ecosystem.rpcTarget ? "Run AI brief" : "Refresh blueprint"}
                 </button>
               </div>
             </div>
@@ -278,12 +403,12 @@ function App() {
             <div className="metric-row">
               <Wallet size={20} />
               <span>Native balance</span>
-              <strong>{snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "Demo estimate"}</strong>
+              <strong>{isLiveRpc && snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "Demo estimate"}</strong>
             </div>
             <div className="metric-row">
               <Activity size={20} />
               <span>Latest block</span>
-              <strong>{snapshot.blockNumber?.toLocaleString() ?? "Not synced"}</strong>
+              <strong>{isLiveRpc ? snapshot.blockNumber?.toLocaleString() ?? "Not synced" : "Not synced"}</strong>
             </div>
             <div className="metric-row">
               <CircleDollarSign size={20} />
@@ -298,10 +423,11 @@ function App() {
           </article>
         </section>
 
-        <section className="panel indexer-panel" aria-label="BNB indexer intelligence">
+        {ecosystem.rpcTarget ? (
+        <section className="panel indexer-panel" aria-label={`${ecosystem.name} indexer intelligence`}>
           <div className="panel-heading">
             <div>
-              <p className="section-label">BNB indexer intelligence</p>
+              <p className="section-label">{ecosystem.name} indexer intelligence</p>
               <h2>Token transfers and contract behavior</h2>
             </div>
             <span className={`indexer-status ${snapshot.indexerStatus ?? "not-configured"}`}>
@@ -357,7 +483,48 @@ function App() {
             </div>
           </div>
         </section>
+        ) : (
+          <section className="panel indexer-panel" aria-label={`${ecosystem.name} adapter blueprint`}>
+            <div className="panel-heading">
+              <div>
+                <p className="section-label">{ecosystem.name} adapter blueprint</p>
+                <h2>Contest-specific integration plan</h2>
+              </div>
+              <span className="indexer-status partial">{ecosystem.adapterStatus}</span>
+            </div>
 
+            <div className="blueprint-grid">
+              <div>
+                <p>
+                  This motherbase view keeps {ecosystem.name} separated from BNB live RPC data. The final contest version should
+                  add ecosystem-native SDK/API calls before recording or submission.
+                </p>
+                <div className="indexer-stats">
+                  <span>
+                    <Layers3 size={16} />
+                    {ecosystem.chainLabel}
+                  </span>
+                  <span>
+                    <CircleDollarSign size={16} />
+                    {ecosystem.prizeShape}
+                  </span>
+                  <span>
+                    <ShieldCheck size={16} />
+                    No cross-contest live state
+                  </span>
+                </div>
+              </div>
+
+              <div className="hook-list compact">
+                {ecosystem.sponsorHooks.map((hook) => (
+                  <span key={hook}>{hook}</span>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {hasLiveAgentPay ? (
         <section className="panel agentpay-panel" aria-label="AgentPay guardrail simulation">
           <div className="panel-heading">
             <div>
@@ -415,6 +582,27 @@ function App() {
             </div>
           </div>
         </section>
+        ) : (
+          <section className="panel agentpay-panel" aria-label={`${ecosystem.name} action blueprint`}>
+            <div className="panel-heading">
+              <div>
+                <p className="section-label">{ecosystem.name} action blueprint</p>
+                <h2>Design the contest action before the demo</h2>
+              </div>
+              <span className="status-chip">{ecosystem.adapterStatus}</span>
+            </div>
+
+            <div className="action-blueprint">
+              {ecosystem.demoActions.map((action, index) => (
+                <div key={action.label}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <h3>{action.label}</h3>
+                  <p>{action.detail}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="grid-secondary" id="actions">
           <article className="panel">
@@ -480,11 +668,11 @@ function App() {
           </div>
         </section>
 
-        <section className="panel submission-pack-panel" aria-label="BNB submission pack">
+        <section className="panel submission-pack-panel" aria-label={`${ecosystem.name} submission pack`}>
           <div className="panel-heading">
             <div>
-              <p className="section-label">BNB submission pack</p>
-              <h2>Copy-ready markdown for the hackathon form</h2>
+              <p className="section-label">{ecosystem.name} submission pack</p>
+              <h2>Copy-ready markdown for this contest form</h2>
             </div>
             <button className="secondary-action" type="button" onClick={copySubmissionPack}>
               {copyState === "copied" ? <Check size={16} /> : <Copy size={16} />}
@@ -496,15 +684,15 @@ function App() {
             <div className="submission-summary">
               <h3>What to say in 15 seconds</h3>
               <p>
-                ChainAgent Radar turns live BNB wallet data into an AI operating brief, then simulates a safe AgentPay action with
-                gas estimation and human approval before any transaction can happen.
+                ChainAgent Radar turns {ecosystem.name} wallet and ecosystem data into a contest-specific AI operating brief,
+                then packages the demo flow, integration notes, and disclosure for submission.
               </p>
             </div>
             <div className="submission-checks">
-              <span>Live RPC: {snapshot.source === "live-rpc" ? "ready" : "run brief"}</span>
+              <span>Live RPC: {isLiveRpc ? "ready" : ecosystem.rpcTarget ? "run brief" : "not applicable"}</span>
               <span>Indexer: {snapshot.indexerStatus ?? "not configured"}</span>
-              <span>AgentPay: {simulation?.status ?? "not simulated"}</span>
-              <span>Disclosure: dry-run only, no signature</span>
+              <span>Action demo: {hasLiveAgentPay ? simulation?.status ?? "not simulated" : "blueprint"}</span>
+              <span>Disclosure: {hasLiveAgentPay ? "dry-run only, no signature" : "adapter not live yet"}</span>
             </div>
           </div>
 
