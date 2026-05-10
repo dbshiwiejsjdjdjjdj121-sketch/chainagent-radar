@@ -544,6 +544,23 @@ function App() {
       ) : null}
 
       <section className="workspace">
+        {isZeroGContest ? (
+          <div className="zero-g-commandbar" aria-label="0G recording command bar">
+            <div className="zero-g-brand">
+              <Radar size={22} />
+              <div>
+                <strong>0G Agent Radar</strong>
+                <span>Memory proof console</span>
+              </div>
+            </div>
+            <div className="zero-g-commandbar-meta">
+              <span>0G APAC 2026</span>
+              <span>Galileo proof attached</span>
+              <span>{formatShortHash(zeroGProof.txHash)}</span>
+            </div>
+          </div>
+        ) : null}
+
         <header className="topbar">
           <div>
             {!isZeroGContest ? (
@@ -849,8 +866,8 @@ function App() {
           <section className="panel memory-panel" aria-label="0G agent memory proof">
             <div className="panel-heading">
               <div>
-                <p className="section-label">0G required proof</p>
-                <h2>Agent memory payload for 0G Storage</h2>
+                <p className="section-label">0G proof trail</p>
+                <h2>Persistent memory stored on 0G</h2>
               </div>
               <span className="indexer-status synced">proof attached</span>
             </div>
@@ -858,8 +875,8 @@ function App() {
             <div className="memory-grid">
               <div className="memory-copy">
                 <p>
-                  This panel now carries the real uploaded 0G memory proof. Record this section after generating the memory
-                  payload so judges can see both the agent-readable JSON and the external Galileo proof.
+                  This section carries the real uploaded 0G memory proof. In the demo, show the wallet brief, then the root
+                  hash, transaction hash, and explorer links so judges can verify the storage trail without reading raw code.
                 </p>
                 <div className="proof-list">
                   <div>
