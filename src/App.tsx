@@ -39,21 +39,6 @@ const readiness = [
   { label: "README", done: true },
 ];
 
-const zeroGProofSteps = [
-  {
-    title: "Create memory",
-    detail: "The wallet brief becomes an agent-readable memory record.",
-  },
-  {
-    title: "Store on 0G",
-    detail: "The memory payload is uploaded to 0G Storage on Galileo.",
-  },
-  {
-    title: "Verify proof",
-    detail: "Judges can inspect the root hash and transaction on 0G explorers.",
-  },
-];
-
 const contestProfiles: Record<
   EcosystemId,
   {
@@ -560,11 +545,6 @@ function App() {
                 <span>Memory proof console</span>
               </div>
             </div>
-            <div className="zero-g-commandbar-meta">
-              <span>0G APAC 2026</span>
-              <span>Galileo proof attached</span>
-              <span>{formatShortHash(zeroGProof.txHash)}</span>
-            </div>
           </div>
         ) : null}
 
@@ -910,22 +890,6 @@ function App() {
                       </a>
                     </strong>
                   </div>
-                </div>
-              </div>
-              <div className="memory-flow" aria-label="0G memory proof flow">
-                {zeroGProofSteps.map((step, index) => (
-                  <div key={step.title}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                      <strong>{step.title}</strong>
-                      <p>{step.detail}</p>
-                    </div>
-                  </div>
-                ))}
-                <div className="memory-proof-card">
-                  <span>Uploaded proof</span>
-                  <strong>{formatShortHash(zeroGProof.rootHash)}</strong>
-                  <small>{zeroGProof.network}</small>
                 </div>
               </div>
             </div>
