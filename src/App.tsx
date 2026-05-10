@@ -231,6 +231,7 @@ function App() {
   const contestProfile = contestProfiles[ecosystem.id];
   const isContestMode = viewMode === "contest";
   const hasZeroGProof = ecosystem.id === "zerog" && zeroGProof.status === "uploaded";
+  const isZeroGContest = isContestMode && ecosystem.id === "zerog";
   const isRecordingReady = isContestMode && (ecosystem.adapterStatus === "ready" || hasZeroGProof);
   const integrationStatusLabel = hasZeroGProof
     ? "0G proof attached"
@@ -488,41 +489,51 @@ function App() {
 
   return (
     <main
-      className={isContestMode ? "app-shell contest-shell" : "app-shell"}
+      className={[
+        "app-shell",
+        isContestMode ? "contest-shell" : "",
+        isZeroGContest ? "zero-g-recording" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{ "--eco": ecosystem.primaryColor, "--eco-accent": ecosystem.accentColor } as CSSProperties}
     >
-      <aside className="sidebar" aria-label="Project navigation">
-        <div className="brand-mark">
-          <Radar size={26} />
-          <div>
-            <strong>{isContestMode ? contestProfile.brand : "ChainAgent"}</strong>
-            <span>{isContestMode ? contestProfile.sidebarLabel : "Prize Ops Console"}</span>
+      {!isZeroGContest ? (
+        <aside className="sidebar" aria-label="Project navigation">
+          <div className="brand-mark">
+            <Radar size={26} />
+            <div>
+              <strong>{isContestMode ? contestProfile.brand : "ChainAgent"}</strong>
+              <span>{isContestMode ? contestProfile.sidebarLabel : "Prize Ops Console"}</span>
+            </div>
           </div>
-        </div>
 
-        <nav className="nav-list">
-          <a className="active" href="#radar">
-            <Activity size={18} /> {isContestMode ? "Live Brief" : "Radar"}
-          </a>
-          <a href="#actions">
-            <Sparkles size={18} /> {isContestMode ? "Proof" : "Actions"}
-          </a>
-          <a href="#submission">
-            <ClipboardCheck size={18} /> Submission
-          </a>
-        </nav>
+          <nav className="nav-list">
+            <a className="active" href="#radar">
+              <Activity size={18} /> {isContestMode ? "Live Brief" : "Radar"}
+            </a>
+            <a href="#actions">
+              <Sparkles size={18} /> {isContestMode ? "Proof" : "Actions"}
+            </a>
+            <a href="#submission">
+              <ClipboardCheck size={18} /> Submission
+            </a>
+          </nav>
 
-        <div className="sidebar-note">
-          <span>{isContestMode ? "Recording mode" : "Current batch"}</span>
-          <strong>{isContestMode ? ecosystem.contest : "Mantle to QIE to BNB"}</strong>
-          <p>{isContestMode ? contestProfile.sidebarNote : "One motherbase, separate contest-specific integrations and disclosures."}</p>
-        </div>
-      </aside>
+          <div className="sidebar-note">
+            <span>{isContestMode ? "Recording mode" : "Current batch"}</span>
+            <strong>{isContestMode ? ecosystem.contest : "Mantle to QIE to BNB"}</strong>
+            <p>{isContestMode ? contestProfile.sidebarNote : "One motherbase, separate contest-specific integrations and disclosures."}</p>
+          </div>
+        </aside>
+      ) : null}
 
       <section className="workspace">
         <header className="topbar">
           <div>
-            <p className="section-label">{isContestMode ? contestProfile.overline : "Online Web3 prize machine"}</p>
+            {!isZeroGContest ? (
+              <p className="section-label">{isContestMode ? contestProfile.overline : "Online Web3 prize machine"}</p>
+            ) : null}
             <h1>{isContestMode ? contestProfile.headline : "AI wallet intelligence, rebuilt per sponsor."}</h1>
             <p className="hero-copy">
               {isContestMode
@@ -531,13 +542,24 @@ function App() {
             </p>
             {isContestMode ? (
               <div className="hero-proof-strip" aria-label="Contest proof points">
-                <span>{ecosystem.chainLabel}</span>
-                <span>{ecosystem.prizeShape}</span>
-                <span>{integrationStatusLabel}</span>
+                {isZeroGContest ? (
+                  <>
+                    <span>0G Storage</span>
+                    <span>Persistent agent memory</span>
+                    <span>Proof attached</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{ecosystem.chainLabel}</span>
+                    <span>{ecosystem.prizeShape}</span>
+                    <span>{integrationStatusLabel}</span>
+                  </>
+                )}
               </div>
             ) : null}
           </div>
-          <div className="topbar-actions">
+          {!isZeroGContest ? (
+            <div className="topbar-actions">
             <div className="mode-toggle" aria-label="View mode">
               <button className={!isContestMode ? "active" : ""} type="button" onClick={() => changeViewMode("motherbase")}>
                 Motherbase
@@ -549,10 +571,12 @@ function App() {
             <button className="icon-button" type="button" onClick={runAnalysis} aria-label="Refresh analysis">
               <RefreshCw size={18} />
             </button>
-          </div>
+            </div>
+          ) : null}
         </header>
 
         {isContestMode ? (
+          !isZeroGContest ? (
           <section className="contest-ribbon" aria-label={`${ecosystem.name} contest mode`}>
             <div>
               <span>Contest demo mode</span>
@@ -565,6 +589,7 @@ function App() {
               <span>{hasZeroGProof ? "proof-attached" : ecosystem.adapterStatus}</span>
             </div>
           </section>
+          ) : null
         ) : (
           <section className="ecosystem-tabs" aria-label="Ecosystem selector">
             {ecosystems.map((item) => (
@@ -581,7 +606,7 @@ function App() {
           </section>
         )}
 
-        {isContestMode ? (
+        {isContestMode && !isZeroGContest ? (
           <section className={isRecordingReady ? "recording-banner ready" : "recording-banner warning"}>
             <div>
               <strong>{isRecordingReady ? "Recording-safe contest view" : "Blueprint only, not final yet"}</strong>
@@ -610,12 +635,14 @@ function App() {
                   onChange={(event) => updateAddress(ecosystemId, event.target.value)}
                   placeholder="0x..."
                 />
-                <button type="button" onClick={connectWallet}>
-                  <Wallet size={17} /> Connect
-                </button>
+                {!isZeroGContest ? (
+                  <button type="button" onClick={connectWallet}>
+                    <Wallet size={17} /> Connect
+                  </button>
+                ) : null}
               </div>
               <div className={isLiveRpc ? "source-banner live" : "source-banner"}>
-                <strong>{isLiveRpc ? "Live RPC" : ecosystem.rpcTarget ? "Demo mode" : "Adapter blueprint"}</strong>
+                <strong>{hasZeroGProof ? "0G proof mode" : isLiveRpc ? "Live RPC" : ecosystem.rpcTarget ? "Demo mode" : "Adapter blueprint"}</strong>
                 <span>{statusMessage}</span>
               </div>
             </div>
@@ -631,7 +658,9 @@ function App() {
               </div>
               <div>
                 <h3>
-                  {isContestMode
+                  {hasZeroGProof
+                    ? "Wallet brief ready for persistent 0G memory"
+                    : isContestMode
                     ? `${shortenAddress(snapshot.address)} powers the ${ecosystem.name} judge demo`
                     : `${shortenAddress(snapshot.address)} is demo-ready for ${ecosystem.name}`}
                 </h3>
@@ -645,35 +674,62 @@ function App() {
           </article>
 
           <article className="panel compact-panel">
-            <div className="metric-row">
-              <Gauge size={20} />
-              <span>Risk level</span>
-              <strong>{analysis.riskLevel}</strong>
-            </div>
-            <div className="metric-row">
-              <Wallet size={20} />
-              <span>Native balance</span>
-              <strong>{isLiveRpc && snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "Demo estimate"}</strong>
-            </div>
-            <div className="metric-row">
-              <Activity size={20} />
-              <span>Latest block</span>
-              <strong>{isLiveRpc ? snapshot.blockNumber?.toLocaleString() ?? "Not synced" : "Not synced"}</strong>
-            </div>
-            <div className="metric-row">
-              <CircleDollarSign size={20} />
-              <span>Prize shape</span>
-              <strong>{ecosystem.prizeShape}</strong>
-            </div>
-            <div className="metric-row">
-              <Layers3 size={20} />
-              <span>Chain target</span>
-              <strong>{ecosystem.chainLabel}</strong>
-            </div>
+            {isZeroGContest ? (
+              <>
+                <div className="metric-row">
+                  <ShieldCheck size={20} />
+                  <span>Storage proof</span>
+                  <strong>Attached</strong>
+                </div>
+                <div className="metric-row">
+                  <Database size={20} />
+                  <span>Memory payload</span>
+                  <strong>Uploaded</strong>
+                </div>
+                <div className="metric-row">
+                  <Activity size={20} />
+                  <span>Network</span>
+                  <strong>{zeroGProof.network}</strong>
+                </div>
+                <div className="metric-row">
+                  <Layers3 size={20} />
+                  <span>Root hash</span>
+                  <strong>{formatShortHash(zeroGProof.rootHash)}</strong>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="metric-row">
+                  <Gauge size={20} />
+                  <span>Risk level</span>
+                  <strong>{analysis.riskLevel}</strong>
+                </div>
+                <div className="metric-row">
+                  <Wallet size={20} />
+                  <span>Native balance</span>
+                  <strong>{isLiveRpc && snapshot.nativeBalance ? `${snapshot.nativeBalance} ${snapshot.nativeSymbol}` : "Demo estimate"}</strong>
+                </div>
+                <div className="metric-row">
+                  <Activity size={20} />
+                  <span>Latest block</span>
+                  <strong>{isLiveRpc ? snapshot.blockNumber?.toLocaleString() ?? "Not synced" : "Not synced"}</strong>
+                </div>
+                <div className="metric-row">
+                  <CircleDollarSign size={20} />
+                  <span>Prize shape</span>
+                  <strong>{ecosystem.prizeShape}</strong>
+                </div>
+                <div className="metric-row">
+                  <Layers3 size={20} />
+                  <span>Chain target</span>
+                  <strong>{ecosystem.chainLabel}</strong>
+                </div>
+              </>
+            )}
           </article>
         </section>
 
-        {ecosystem.rpcTarget ? (
+        {isZeroGContest ? null : ecosystem.rpcTarget ? (
         <section className="panel indexer-panel" aria-label={`${ecosystem.name} indexer intelligence`}>
           <div className="panel-heading">
             <div>
@@ -822,7 +878,7 @@ function App() {
           </section>
         ) : null}
 
-        {hasLiveAgentPay ? (
+        {isZeroGContest ? null : hasLiveAgentPay ? (
         <section className="panel agentpay-panel" aria-label="AgentPay guardrail simulation">
           <div className="panel-heading">
             <div>
@@ -902,6 +958,7 @@ function App() {
           </section>
         )}
 
+        {!isZeroGContest ? (
         <section className="grid-secondary" id="actions">
           <article className="panel">
             <div className="panel-heading">
@@ -949,7 +1006,9 @@ function App() {
             </a>
           </article>
         </section>
+        ) : null}
 
+        {!isZeroGContest ? (
         <section className="submission-band" id="submission">
           <div>
             <p className="section-label">Submission readiness</p>
@@ -965,7 +1024,9 @@ function App() {
             ))}
           </div>
         </section>
+        ) : null}
 
+        {!isZeroGContest ? (
         <section className="panel submission-pack-panel" aria-label={`${ecosystem.name} submission pack`}>
           <div className="panel-heading">
             <div>
@@ -993,6 +1054,7 @@ function App() {
 
           <pre className="submission-preview">{submissionMarkdown}</pre>
         </section>
+        ) : null}
       </section>
     </main>
   );
