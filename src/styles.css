@@ -1031,6 +1031,71 @@ input {
   white-space: pre-wrap;
 }
 
+.memory-flow {
+  display: grid;
+  gap: 12px;
+}
+
+.memory-flow > div:not(.memory-proof-card) {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--eco) 18%, var(--line));
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--eco-accent) 7%, #fffdfa);
+}
+
+.memory-flow > div:not(.memory-proof-card) > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--eco);
+  color: #fffaf1;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.memory-flow strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.memory-flow p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.memory-proof-card {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--eco-accent) 42%, var(--line));
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--eco-accent) 18%, transparent), transparent 34%),
+    color-mix(in srgb, var(--eco-accent) 8%, #fffdfa);
+}
+
+.memory-proof-card span,
+.memory-proof-card small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.memory-proof-card strong {
+  color: var(--eco);
+  overflow-wrap: anywhere;
+}
+
 .hook-list {
   display: flex;
   flex-wrap: wrap;
