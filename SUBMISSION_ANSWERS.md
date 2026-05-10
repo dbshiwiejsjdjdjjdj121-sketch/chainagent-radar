@@ -10,7 +10,7 @@ AI wallet intelligence for BNB Chain with live RPC analysis, optional indexer en
 
 ## Links
 
-- Live demo: https://chainagent-radar-q68jzwivy-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+- Live demo: https://chainagent-radar-g5yuh2pb4-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 - GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 - Demo video: pending recording
 

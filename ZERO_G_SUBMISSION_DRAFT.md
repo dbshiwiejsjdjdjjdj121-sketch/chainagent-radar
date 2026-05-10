@@ -6,7 +6,7 @@
 
 ## Live Demo
 
-Pending deployment for `/?contest=zerog`
+https://chainagent-radar-g5yuh2pb4-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
 
 ## One-Line Description
 
@@ -55,4 +55,3 @@ The ChainAgent Radar UI shell is reused from the existing Web3 prize motherbase.
 5. Replace pending proof fields with real root/tx/explorer links.
 6. Deploy and record a <=3 minute video.
 7. Publish the required X post with `#0GHackathon` and `#BuildOn0G`.
-
