@@ -607,6 +607,52 @@ input {
   color: var(--eco-accent);
 }
 
+.generated-brief-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--eco-accent) 44%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--eco-accent) 8%, var(--paper));
+}
+
+.generated-brief-card span,
+.generated-brief-card small {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.generated-brief-card strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--eco);
+  font-size: 18px;
+}
+
+.generated-brief-card ul {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.generated-brief-card li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.generated-brief-card svg {
+  color: var(--eco-accent);
+  flex: 0 0 auto;
+}
+
 .zero-g-recording .source-banner {
   border-color: color-mix(in srgb, var(--eco-accent) 36%, var(--line));
   background: color-mix(in srgb, var(--eco-accent) 7%, #fffdfa);
@@ -1373,6 +1419,8 @@ input {
 .zero-g-recording .metric-row span,
 .zero-g-recording .wallet-row label,
 .zero-g-recording .source-banner strong,
+.zero-g-recording .generated-brief-card span,
+.zero-g-recording .generated-brief-card small,
 .zero-g-recording .proof-list span {
   font-family: "JetBrains Mono", "SFMono-Regular", monospace;
   letter-spacing: 0.08em;
@@ -1472,6 +1520,7 @@ input {
 
 .zero-g-recording input,
 .zero-g-recording .source-banner,
+.zero-g-recording .generated-brief-card,
 .zero-g-recording .proof-list div {
   border-color: rgba(174, 198, 255, 0.18);
   border-radius: 3px;
@@ -1490,7 +1539,15 @@ input {
   background: rgba(0, 112, 243, 0.08);
 }
 
+.zero-g-recording .generated-brief-card {
+  border-color: rgba(0, 255, 194, 0.34);
+  background:
+    radial-gradient(circle at top right, rgba(0, 255, 194, 0.12), transparent 36%),
+    rgba(0, 255, 194, 0.06);
+}
+
 .zero-g-recording .source-banner strong,
+.zero-g-recording .generated-brief-card strong,
 .zero-g-recording .proof-list strong {
   color: #b9d1ff;
 }
@@ -1511,6 +1568,9 @@ input {
 .zero-g-recording .memory-copy p,
 .zero-g-recording .metric-row span,
 .zero-g-recording .source-banner span,
+.zero-g-recording .generated-brief-card li,
+.zero-g-recording .generated-brief-card span,
+.zero-g-recording .generated-brief-card small,
 .zero-g-recording .wallet-row label {
   color: rgba(232, 237, 247, 0.66);
 }

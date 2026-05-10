@@ -226,6 +226,7 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+  const [zeroGBriefGeneratedAt, setZeroGBriefGeneratedAt] = useState<string | null>(null);
 
   const ecosystem = ecosystems.find((item) => item.id === ecosystemId) ?? ecosystems[0];
   const contestProfile = contestProfiles[ecosystem.id];
@@ -383,6 +384,13 @@ function App() {
         }));
       });
       if (activeId === "zerog" && zeroGProof.status === "uploaded") {
+        setZeroGBriefGeneratedAt(
+          new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        );
         updateStatus(
           activeId,
           `Agent memory brief refreshed. 0G Storage root ${formatShortHash(zeroGProof.rootHash)} and ChainScan transaction are attached for judges.`,
@@ -664,6 +672,26 @@ function App() {
                 <strong>{hasZeroGProof ? "0G proof mode" : isLiveRpc ? "Live RPC" : ecosystem.rpcTarget ? "Demo mode" : "Adapter blueprint"}</strong>
                 <span>{statusMessage}</span>
               </div>
+              {isZeroGContest && zeroGBriefGeneratedAt ? (
+                <div className="generated-brief-card" role="status" aria-live="polite">
+                  <div>
+                    <span>Generated memory brief</span>
+                    <strong>Ready for 0G proof review</strong>
+                  </div>
+                  <ul>
+                    <li>
+                      <Check size={15} /> Wallet readiness updated to {analysis.score}
+                    </li>
+                    <li>
+                      <Check size={15} /> Storage root attached: {formatShortHash(zeroGProof.rootHash)}
+                    </li>
+                    <li>
+                      <Check size={15} /> ChainScan transaction ready for judges
+                    </li>
+                  </ul>
+                  <small>Generated at {zeroGBriefGeneratedAt}</small>
+                </div>
+              ) : null}
             </div>
 
             <div className="score-layout">
