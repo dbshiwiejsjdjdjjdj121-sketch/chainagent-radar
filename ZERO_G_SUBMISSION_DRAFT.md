@@ -6,7 +6,7 @@
 
 ## Live Demo
 
-https://chainagent-radar-g5yuh2pb4-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
+https://chainagent-radar-mpramx28k-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
 
 ## One-Line Description
 
