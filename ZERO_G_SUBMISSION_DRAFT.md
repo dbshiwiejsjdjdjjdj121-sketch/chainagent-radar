@@ -8,6 +8,18 @@
 
 https://chainagent-radar-dhagyyr24-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
 
+## Demo Video
+
+https://www.youtube.com/watch?v=IPB-a8SuGHs
+
+## Public X Post
+
+https://x.com/bOnWIc2s2IRyrwK/status/2053519135225913394?s=20
+
+## GitHub Repository
+
+https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
+
 ## One-Line Description
 
 AI wallet-risk briefs with persistent 0G Storage memory so agents can verify past reasoning before taking on-chain actions.
@@ -50,9 +62,6 @@ The ChainAgent Radar UI shell is reused from the existing Web3 prize motherbase.
 
 ## Next Build Steps
 
-1. Register/login on HackQuest and join the 0G APAC Hackathon.
-2. Create or use a wallet for 0G Galileo or the required 0G network.
-3. Get faucet tokens.
-4. Deploy the proof-attached build and record a <=3 minute video.
-5. Publish the required X post with `#0GHackathon` and `#BuildOn0G`.
-6. Submit GitHub, live demo, video, proof links, and team info on HackQuest.
+1. Submit GitHub, live demo, YouTube demo video, public X post, proof links, and team info on HackQuest.
+2. Confirm the HackQuest project status changes from incomplete to eligible/submitted.
+3. Save a screenshot of the final submitted project page for tracking.
