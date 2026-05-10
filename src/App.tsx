@@ -397,6 +397,13 @@ function App() {
           stableVolume: current.stableVolume + 420,
         }));
       });
+      if (activeId === "zerog" && zeroGProof.status === "uploaded") {
+        updateStatus(
+          activeId,
+          `Agent memory brief refreshed. 0G Storage root ${formatShortHash(zeroGProof.rootHash)} and ChainScan transaction are attached for judges.`,
+        );
+        return;
+      }
       updateStatus(activeId, `${activeEcosystem.name} blueprint refreshed. Live SDK work is still gated until this contest adapter is confirmed.`);
     } catch (error) {
       updateStatus(activeId, error instanceof Error ? error.message : "Analysis failed. Try again or switch to demo mode.");
