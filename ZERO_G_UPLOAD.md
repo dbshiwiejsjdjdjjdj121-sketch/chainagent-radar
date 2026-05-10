@@ -47,6 +47,16 @@ npm run zerog:upload
 
 5. Copy the resulting `rootHash`, `txHash`, and explorer links into `ZERO_G_SUBMISSION_DRAFT.md` and the app before recording.
 
+## Latest Proof
+
+- Status: uploaded.
+- Network: 0G Galileo Testnet.
+- Signer: `0xCB8f56a7C5804eF067C1B58710853B5cC37D09e6`
+- Root hash: `0x43f7b12fd63fd797c4c051eadc01d9cec7a6335abaf4761b25ed21bc9c6adc75`
+- Transaction hash: `0x69dd01f67fddf30a979e4e9c15cc0f72697ff1a9efce25a9a32c1fb2c8ccfe4c`
+- ChainScan: https://chainscan-galileo.0g.ai/tx/0x69dd01f67fddf30a979e4e9c15cc0f72697ff1a9efce25a9a32c1fb2c8ccfe4c
+- StorageScan: https://storagescan-galileo.0g.ai/submissions
+
 ## Safety Notes
 
 - Use a fresh testnet wallet only.

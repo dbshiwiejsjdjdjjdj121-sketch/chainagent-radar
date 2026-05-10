@@ -23,6 +23,7 @@ import {
 import { startTransition, useDeferredValue, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { ecosystems, sampleSnapshot } from "./data/ecosystems";
+import { formatShortHash, zeroGProof } from "./data/zeroGProof";
 import { fetchBnbWalletSnapshot, simulateBnbAgentPayment } from "./services/bnbRpc";
 import type { AgentPaymentSimulation, EcosystemId, WalletSnapshot } from "./types";
 import { createAnalysis, shortenAddress } from "./utils/analysis";
@@ -112,12 +113,12 @@ const contestProfiles: Record<
     headline: "Persistent agent memory for wallet-risk decisions.",
     heroCopy:
       "A 0G-specific build that converts wallet analysis into a verifiable agent memory payload, then prepares root hash, tx hash, and explorer proof for submission.",
-    ribbonCopy: "Deadline is May 16, 2026. This version is preparation-safe, but final video needs real 0G proof.",
+    ribbonCopy: "Deadline is May 16, 2026. Real 0G Storage proof is now attached for recording and submission packaging.",
     panelLabel: "0G agent memory demo",
     panelTitle: "Wallet brief to persistent 0G memory",
     primaryActionLabel: "Generate memory brief",
     recordingNote:
-      "Not final yet: add a real 0G Storage or Agent ID proof before recording, because the rules reject concept-only videos.",
+      "Recording-safe: show the memory payload, the 0G root hash, the ChainScan transaction, and the StorageScan lookup before the closing pitch.",
     pitch:
       "0G Agent Memory Radar stores wallet-risk reasoning as persistent 0G agent memory so automated agents can verify past context before acting.",
   },
@@ -199,7 +200,7 @@ function createInitialStatusMessages(): Record<EcosystemId, string> {
     mantle: "Mantle blueprint loaded. Live adapter work stays isolated until the contest version is built.",
     qie: "QIE blueprint loaded. No BNB live data is reused in this contest view.",
     bnb: "Demo snapshot loaded. Run the BNB brief to sync live public RPC data.",
-    zerog: "0G prep mode loaded. Generate an agent memory payload, then attach real 0G Storage proof before submission.",
+    zerog: "0G proof mode loaded. Generate an agent memory payload and show the attached Storage root plus ChainScan transaction.",
     hackindia: "Sharp blueprint loaded. Eligibility and SDK work stay isolated from other contests.",
   };
 }
@@ -229,7 +230,13 @@ function App() {
   const ecosystem = ecosystems.find((item) => item.id === ecosystemId) ?? ecosystems[0];
   const contestProfile = contestProfiles[ecosystem.id];
   const isContestMode = viewMode === "contest";
-  const isRecordingReady = isContestMode && ecosystem.adapterStatus === "ready";
+  const hasZeroGProof = ecosystem.id === "zerog" && zeroGProof.status === "uploaded";
+  const isRecordingReady = isContestMode && (ecosystem.adapterStatus === "ready" || hasZeroGProof);
+  const integrationStatusLabel = hasZeroGProof
+    ? "0G proof attached"
+    : ecosystem.adapterStatus === "ready"
+      ? "Live adapter"
+      : "Adapter blueprint";
   const address = addressesByEcosystem[ecosystemId];
   const snapshot = snapshotsByEcosystem[ecosystemId];
   const statusMessage = statusByEcosystem[ecosystemId];
@@ -253,16 +260,29 @@ function App() {
       summary: analysis.summary,
       sponsorHooks: ecosystem.sponsorHooks,
       recommendedActions: analysis.nextActions,
-      proofStatus: ecosystem.id === "zerog" ? "0G proof pending: attach Storage root hash and tx hash before submission" : "not applicable",
+      proofStatus: hasZeroGProof ? "uploaded to 0G Storage and anchored by a Galileo transaction" : "not applicable",
+      ...(hasZeroGProof
+        ? {
+            zeroGProof: {
+              network: zeroGProof.network,
+              rootHash: zeroGProof.rootHash,
+              txHash: zeroGProof.txHash,
+              signerAddress: zeroGProof.signerAddress,
+              payloadSha256: zeroGProof.payloadSha256,
+              chainScanUrl: zeroGProof.chainScanUrl,
+              storageScanUrl: zeroGProof.storageScanUrl,
+            },
+          }
+        : {}),
       generatedAt: new Date().toISOString(),
     }),
-    [analysis, ecosystem, snapshot.address],
+    [analysis, ecosystem, hasZeroGProof, snapshot.address],
   );
   const agentMemoryPreview = JSON.stringify(agentMemoryPayload, null, 2);
   const activeReadiness = ecosystem.id === "zerog"
     ? [
         { label: "Public repo", done: true },
-        { label: "0G proof", done: false },
+        { label: "0G proof", done: true },
         { label: "Demo video", done: false },
         { label: "README draft", done: true },
         { label: "X post", done: false },
@@ -513,7 +533,7 @@ function App() {
               <div className="hero-proof-strip" aria-label="Contest proof points">
                 <span>{ecosystem.chainLabel}</span>
                 <span>{ecosystem.prizeShape}</span>
-                <span>{ecosystem.adapterStatus === "ready" ? "Live adapter" : "Adapter blueprint"}</span>
+                <span>{integrationStatusLabel}</span>
               </div>
             ) : null}
           </div>
@@ -542,7 +562,7 @@ function App() {
             <div className="contest-ribbon-meta">
               <span>{ecosystem.deadline}</span>
               <span>{ecosystem.track}</span>
-              <span>{ecosystem.adapterStatus}</span>
+              <span>{hasZeroGProof ? "proof-attached" : ecosystem.adapterStatus}</span>
             </div>
           </section>
         ) : (
@@ -567,7 +587,7 @@ function App() {
               <strong>{isRecordingReady ? "Recording-safe contest view" : "Blueprint only, not final yet"}</strong>
               <p>{contestProfile.recordingNote}</p>
             </div>
-            <span>{isRecordingReady ? "Demo-ready" : "Needs live adapter"}</span>
+              <span>{isRecordingReady ? "Demo-ready" : "Needs live adapter"}</span>
           </section>
         ) : null}
 
@@ -578,7 +598,7 @@ function App() {
                 <p className="section-label">{isContestMode ? contestProfile.panelLabel : ecosystem.contest}</p>
                 <h2>{isContestMode ? contestProfile.panelTitle : ecosystem.track}</h2>
               </div>
-              <span className="status-chip">{ecosystem.adapterStatus}</span>
+              <span className="status-chip">{hasZeroGProof ? "proof-attached" : ecosystem.adapterStatus}</span>
             </div>
 
             <div className="wallet-row">
@@ -761,15 +781,14 @@ function App() {
                 <p className="section-label">0G required proof</p>
                 <h2>Agent memory payload for 0G Storage</h2>
               </div>
-              <span className="indexer-status partial">proof pending</span>
+              <span className="indexer-status synced">proof attached</span>
             </div>
 
             <div className="memory-grid">
               <div className="memory-copy">
                 <p>
-                  The 0G submission needs more than a polished UI. This panel prepares the exact JSON memory record we should upload
-                  to 0G Storage or connect to Agent ID. Before final video, replace the pending fields with a real root hash, tx hash,
-                  ChainScan link, and StorageScan link.
+                  This panel now carries the real uploaded 0G memory proof. Record this section after generating the memory
+                  payload so judges can see both the agent-readable JSON and the external Galileo proof.
                 </p>
                 <div className="proof-list">
                   <div>
@@ -778,15 +797,23 @@ function App() {
                   </div>
                   <div>
                     <span>Root hash</span>
-                    <strong>pending upload</strong>
+                    <strong title={zeroGProof.rootHash}>{formatShortHash(zeroGProof.rootHash)}</strong>
                   </div>
                   <div>
                     <span>Transaction hash</span>
-                    <strong>pending upload</strong>
+                    <strong title={zeroGProof.txHash}>{formatShortHash(zeroGProof.txHash)}</strong>
                   </div>
                   <div>
                     <span>Explorer proof</span>
-                    <strong>ChainScan + StorageScan required</strong>
+                    <strong>
+                      <a href={zeroGProof.chainScanUrl} target="_blank" rel="noreferrer">
+                        ChainScan tx <ExternalLink size={13} />
+                      </a>{" "}
+                      /{" "}
+                      <a href={zeroGProof.storageScanUrl} target="_blank" rel="noreferrer">
+                        StorageScan files <ExternalLink size={13} />
+                      </a>
+                    </strong>
                   </div>
                 </div>
               </div>

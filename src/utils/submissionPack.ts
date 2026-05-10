@@ -1,5 +1,6 @@
 import type { AgentPaymentSimulation, AnalysisResult, Ecosystem, WalletSnapshot } from "../types";
 import { shortenAddress } from "./analysis";
+import { formatShortHash, zeroGProof } from "../data/zeroGProof";
 
 type SubmissionPackInput = {
   ecosystem: Ecosystem;
@@ -53,11 +54,15 @@ export function createSubmissionMarkdown({ ecosystem, snapshot, analysis, simula
     : ecosystem.rpcTarget
       ? ["[pending] AgentPay policy checks not generated yet."]
       : ["[pending] Replace blueprint with a live contest-specific action before final submission."];
-  const zeroGProof = [
+  const zeroGProofItems = [
     "0G component: 0G Storage memory record",
-    "Required proof: root hash, transaction hash, 0G ChainScan link, and StorageScan link",
-    "Current status: pending real 0G upload before final recording",
-    "Submission rule: concept-only videos are not valid for 0G APAC",
+    `Status: uploaded on ${zeroGProof.network}`,
+    `Root hash: ${zeroGProof.rootHash}`,
+    `Transaction hash: ${zeroGProof.txHash}`,
+    `Signer: ${zeroGProof.signerAddress}`,
+    `Payload SHA-256: ${zeroGProof.payloadSha256}`,
+    `0G ChainScan: ${zeroGProof.chainScanUrl}`,
+    `0G StorageScan: ${zeroGProof.storageScanUrl} (search ${formatShortHash(zeroGProof.rootHash)})`,
   ];
 
   return `# ${projectName}
@@ -85,7 +90,7 @@ ${list(liveData)}
 
 ${ecosystem.id === "zerog" ? `## 0G Integration Proof Checklist
 
-${list(zeroGProof)}
+${list(zeroGProofItems)}
 ` : ""}
 
 ## AgentPay Guardrail
@@ -115,7 +120,7 @@ ${list(analysis.nextActions)}
 ${ecosystem.rpcTarget
     ? "This demo uses live BNB RPC data and optional Etherscan API V2 enrichment. The AgentPay flow is a dry-run approval simulation only: it estimates gas and checks policy rules, but does not sign or broadcast transactions. Production deployment should proxy indexer calls through a backend and move real signing to testnet-only safeguards first."
     : ecosystem.id === "zerog"
-      ? "This is the 0G-specific contest version of the ChainAgent Radar shell. It is not ready for submission until a real 0G Storage or Agent ID proof is attached. The final video must show how the 0G component is actually used."
+      ? "This is the 0G-specific contest version of the ChainAgent Radar shell. The current build includes a real Galileo testnet 0G Storage upload proof for the generated agent-memory payload; production use should add deeper Agent ID integration and richer live wallet indexing."
     : `This is a ${ecosystem.name} contest blueprint inside the ChainAgent Radar motherbase. It must receive a live ${ecosystem.chainLabel} integration, contest-specific README, and dedicated demo video before final submission.`}
 `;
 }

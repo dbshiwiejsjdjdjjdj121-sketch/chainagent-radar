@@ -931,6 +931,19 @@ input {
 
 .proof-list strong {
   color: var(--eco);
+  overflow-wrap: anywhere;
+}
+
+.proof-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.proof-list a:hover {
+  text-decoration: underline;
 }
 
 .memory-preview {
