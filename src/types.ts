@@ -1,4 +1,4 @@
-export type EcosystemId = "mantle" | "qie" | "bnb" | "hackindia";
+export type EcosystemId = "mantle" | "qie" | "bnb" | "zerog" | "hackindia";
 
 export type ActionType = "swap" | "credential" | "payment" | "report";
 

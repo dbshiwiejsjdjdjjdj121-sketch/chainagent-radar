@@ -104,6 +104,23 @@ const contestProfiles: Record<
     pitch:
       "BNB ChainAgent Radar turns a BNB wallet into a live readiness score, risk explanation, and human-approved agent action plan.",
   },
+  zerog: {
+    brand: "0G Agent Radar",
+    sidebarLabel: "0G submission prep",
+    sidebarNote: "Nearest actionable hackathon. This mode focuses on 0G Storage memory proof, not a generic wallet dashboard.",
+    overline: "0G APAC Hackathon",
+    headline: "Persistent agent memory for wallet-risk decisions.",
+    heroCopy:
+      "A 0G-specific build that converts wallet analysis into a verifiable agent memory payload, then prepares root hash, tx hash, and explorer proof for submission.",
+    ribbonCopy: "Deadline is May 16, 2026. This version is preparation-safe, but final video needs real 0G proof.",
+    panelLabel: "0G agent memory demo",
+    panelTitle: "Wallet brief to persistent 0G memory",
+    primaryActionLabel: "Generate memory brief",
+    recordingNote:
+      "Not final yet: add a real 0G Storage or Agent ID proof before recording, because the rules reject concept-only videos.",
+    pitch:
+      "0G Agent Memory Radar stores wallet-risk reasoning as persistent 0G agent memory so automated agents can verify past context before acting.",
+  },
   hackindia: {
     brand: "Sharp ChainAgent",
     sidebarLabel: "Sharp blueprint",
@@ -162,6 +179,7 @@ function createInitialSnapshots(): Record<EcosystemId, WalletSnapshot> {
     mantle: createContestSnapshot("Mantle contest demo snapshot"),
     qie: createContestSnapshot("QIE contest demo snapshot"),
     bnb: createContestSnapshot("BNB demo snapshot"),
+    zerog: createContestSnapshot("0G agent memory demo snapshot"),
     hackindia: createContestSnapshot("Sharp contest demo snapshot"),
   };
 }
@@ -171,6 +189,7 @@ function createInitialAddresses(): Record<EcosystemId, string> {
     mantle: sampleSnapshot.address,
     qie: sampleSnapshot.address,
     bnb: sampleSnapshot.address,
+    zerog: sampleSnapshot.address,
     hackindia: sampleSnapshot.address,
   };
 }
@@ -180,6 +199,7 @@ function createInitialStatusMessages(): Record<EcosystemId, string> {
     mantle: "Mantle blueprint loaded. Live adapter work stays isolated until the contest version is built.",
     qie: "QIE blueprint loaded. No BNB live data is reused in this contest view.",
     bnb: "Demo snapshot loaded. Run the BNB brief to sync live public RPC data.",
+    zerog: "0G prep mode loaded. Generate an agent memory payload, then attach real 0G Storage proof before submission.",
     hackindia: "Sharp blueprint loaded. Eligibility and SDK work stay isolated from other contests.",
   };
 }
@@ -189,6 +209,7 @@ function createInitialSimulations(): Record<EcosystemId, AgentPaymentSimulation 
     mantle: null,
     qie: null,
     bnb: null,
+    zerog: null,
     hackindia: null,
   };
 }
@@ -221,6 +242,32 @@ function App() {
     () => createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }),
     [analysis, ecosystem, simulation, snapshot],
   );
+  const agentMemoryPayload = useMemo(
+    () => ({
+      project: "0G Agent Memory Radar",
+      contest: ecosystem.contest,
+      wallet: snapshot.address,
+      chainTarget: ecosystem.chainLabel,
+      readinessScore: analysis.score,
+      riskLevel: analysis.riskLevel,
+      summary: analysis.summary,
+      sponsorHooks: ecosystem.sponsorHooks,
+      recommendedActions: analysis.nextActions,
+      proofStatus: ecosystem.id === "zerog" ? "0G proof pending: attach Storage root hash and tx hash before submission" : "not applicable",
+      generatedAt: new Date().toISOString(),
+    }),
+    [analysis, ecosystem, snapshot.address],
+  );
+  const agentMemoryPreview = JSON.stringify(agentMemoryPayload, null, 2);
+  const activeReadiness = ecosystem.id === "zerog"
+    ? [
+        { label: "Public repo", done: true },
+        { label: "0G proof", done: false },
+        { label: "Demo video", done: false },
+        { label: "README draft", done: true },
+        { label: "X post", done: false },
+      ]
+    : readiness;
 
   function changeViewMode(nextMode: ViewMode) {
     setViewMode(nextMode);
@@ -417,7 +464,7 @@ function App() {
     }
   }
 
-  const completed = readiness.filter((item) => item.done).length;
+  const completed = activeReadiness.filter((item) => item.done).length;
 
   return (
     <main
@@ -707,6 +754,47 @@ function App() {
           </section>
         )}
 
+        {ecosystem.id === "zerog" ? (
+          <section className="panel memory-panel" aria-label="0G agent memory proof">
+            <div className="panel-heading">
+              <div>
+                <p className="section-label">0G required proof</p>
+                <h2>Agent memory payload for 0G Storage</h2>
+              </div>
+              <span className="indexer-status partial">proof pending</span>
+            </div>
+
+            <div className="memory-grid">
+              <div className="memory-copy">
+                <p>
+                  The 0G submission needs more than a polished UI. This panel prepares the exact JSON memory record we should upload
+                  to 0G Storage or connect to Agent ID. Before final video, replace the pending fields with a real root hash, tx hash,
+                  ChainScan link, and StorageScan link.
+                </p>
+                <div className="proof-list">
+                  <div>
+                    <span>0G component</span>
+                    <strong>0G Storage memory record</strong>
+                  </div>
+                  <div>
+                    <span>Root hash</span>
+                    <strong>pending upload</strong>
+                  </div>
+                  <div>
+                    <span>Transaction hash</span>
+                    <strong>pending upload</strong>
+                  </div>
+                  <div>
+                    <span>Explorer proof</span>
+                    <strong>ChainScan + StorageScan required</strong>
+                  </div>
+                </div>
+              </div>
+              <pre className="memory-preview">{agentMemoryPreview}</pre>
+            </div>
+          </section>
+        ) : null}
+
         {hasLiveAgentPay ? (
         <section className="panel agentpay-panel" aria-label="AgentPay guardrail simulation">
           <div className="panel-heading">
@@ -842,7 +930,7 @@ function App() {
             <p>Each contest version gets a unique README, demo script, sponsor integration notes, and disclosure file.</p>
           </div>
           <div className="readiness-list">
-            {readiness.map((item) => (
+            {activeReadiness.map((item) => (
               <div className={item.done ? "done" : ""} key={item.label}>
                 {item.done ? <BadgeCheck size={18} /> : <ShieldAlert size={18} />}
                 <span>{item.label}</span>

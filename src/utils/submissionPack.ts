@@ -14,7 +14,8 @@ function list(items: string[]) {
 
 export function createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }: SubmissionPackInput) {
   const hasLiveRpc = Boolean(ecosystem.rpcTarget && snapshot.source === "live-rpc");
-  const projectName = ecosystem.id === "bnb" ? "BNB ChainAgent Radar" : `ChainAgent Radar for ${ecosystem.name}`;
+  const projectName =
+    ecosystem.id === "bnb" ? "BNB ChainAgent Radar" : ecosystem.id === "zerog" ? "0G Agent Memory Radar" : `ChainAgent Radar for ${ecosystem.name}`;
   const liveData = [
     `Data source: ${snapshot.sourceLabel}`,
     `Wallet: ${snapshot.address}`,
@@ -52,6 +53,12 @@ export function createSubmissionMarkdown({ ecosystem, snapshot, analysis, simula
     : ecosystem.rpcTarget
       ? ["[pending] AgentPay policy checks not generated yet."]
       : ["[pending] Replace blueprint with a live contest-specific action before final submission."];
+  const zeroGProof = [
+    "0G component: 0G Storage memory record",
+    "Required proof: root hash, transaction hash, 0G ChainScan link, and StorageScan link",
+    "Current status: pending real 0G upload before final recording",
+    "Submission rule: concept-only videos are not valid for 0G APAC",
+  ];
 
   return `# ${projectName}
 
@@ -75,6 +82,11 @@ Web3 users and builders can see raw wallet data, but they often cannot quickly d
 ## Current Integration
 
 ${list(liveData)}
+
+${ecosystem.id === "zerog" ? `## 0G Integration Proof Checklist
+
+${list(zeroGProof)}
+` : ""}
 
 ## AgentPay Guardrail
 
@@ -102,6 +114,8 @@ ${list(analysis.nextActions)}
 
 ${ecosystem.rpcTarget
     ? "This demo uses live BNB RPC data and optional Etherscan API V2 enrichment. The AgentPay flow is a dry-run approval simulation only: it estimates gas and checks policy rules, but does not sign or broadcast transactions. Production deployment should proxy indexer calls through a backend and move real signing to testnet-only safeguards first."
+    : ecosystem.id === "zerog"
+      ? "This is the 0G-specific contest version of the ChainAgent Radar shell. It is not ready for submission until a real 0G Storage or Agent ID proof is attached. The final video must show how the 0G component is actually used."
     : `This is a ${ecosystem.name} contest blueprint inside the ChainAgent Radar motherbase. It must receive a live ${ecosystem.chainLabel} integration, contest-specific README, and dedicated demo video before final submission.`}
 `;
 }

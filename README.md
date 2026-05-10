@@ -18,6 +18,8 @@ Current primary target: **BNB Hack: Online Edition**.
 
 The project is designed as a reusable Web3 prize motherbase. BNB is the first live version; Mantle, QIE, and Sharp/HackIndia can receive separate contest-specific versions with new integrations and disclosures.
 
+Nearest active prep target: **0G APAC Hackathon** via `/?contest=zerog`.
+
 ## Motherbase Rule
 
 This repository has two roles:
@@ -38,6 +40,7 @@ Do not record or submit the motherbase view as-is. Each final contest submission
 - Sponsor-specific action cards for BNB, Mantle, QIE, and Sharp/HackIndia adaptations.
 - Isolated per-contest state so BNB live RPC data and AgentPay simulations do not leak into QIE, Mantle, or Sharp/HackIndia blueprint views.
 - `?contest=bnb` recording mode that hides unrelated contests and presents the project as a dedicated BNB Hack submission.
+- `?contest=zerog` preparation mode for 0G Agent Memory Radar, including an agent memory payload and required 0G proof checklist.
 
 ## Demo Flow
 
@@ -95,6 +98,8 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md).
 - [DEMO_SCRIPT.md](./DEMO_SCRIPT.md)
 - [SUBMISSION_ANSWERS.md](./SUBMISSION_ANSWERS.md)
 - [DISCLOSURE.md](./DISCLOSURE.md)
+- [ZERO_G_SUBMISSION_DRAFT.md](./ZERO_G_SUBMISSION_DRAFT.md)
+- [ZERO_G_DEMO_SCRIPT.md](./ZERO_G_DEMO_SCRIPT.md)
 
 ## Adaptation Rule
 

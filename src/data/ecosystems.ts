@@ -87,6 +87,31 @@ export const ecosystems: Ecosystem[] = [
     ],
   },
   {
+    id: "zerog",
+    name: "0G",
+    contest: "0G APAC Hackathon 2026",
+    deadline: "May 16, 2026 23:59 UTC+8",
+    track: "Agentic Infrastructure / Agentic Economy",
+    prizeShape: "$150K USDT + 0G credits",
+    chainLabel: "0G Galileo / 0G Storage",
+    primaryColor: "#202B6F",
+    accentColor: "#23D7A8",
+    adapterStatus: "needs-sdk",
+    sponsorHooks: ["0G Storage", "Agent memory", "0G Chain proof", "AI x Web3", "public X post"],
+    demoActions: [
+      {
+        type: "report",
+        label: "Generate agent memory",
+        detail: "Create a JSON risk and action brief that can be stored as persistent 0G agent memory.",
+      },
+      {
+        type: "credential",
+        label: "Attach 0G proof",
+        detail: "Add root hash, transaction hash, ChainScan link, and StorageScan link before final submission.",
+      },
+    ],
+  },
+  {
     id: "hackindia",
     name: "Sharp",
     contest: "HackIndia Web3 Hackathon 2026",

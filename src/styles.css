@@ -884,6 +884,70 @@ input {
   flex: 0 0 auto;
 }
 
+.memory-panel {
+  margin-bottom: 20px;
+}
+
+.memory-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.memory-copy {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.memory-copy p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.proof-list {
+  display: grid;
+  gap: 9px;
+}
+
+.proof-list div {
+  display: grid;
+  gap: 5px;
+  min-height: 58px;
+  padding: 11px 12px;
+  border: 1px solid color-mix(in srgb, var(--eco) 28%, var(--line));
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--eco) 6%, var(--paper));
+}
+
+.proof-list span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.proof-list strong {
+  color: var(--eco);
+}
+
+.memory-preview {
+  min-height: 280px;
+  max-height: 420px;
+  padding: 16px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #111926;
+  color: #e9fff8;
+  font-family: "SFMono-Regular", "Cascadia Code", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
 .hook-list {
   display: flex;
   flex-wrap: wrap;
@@ -1107,6 +1171,7 @@ input {
   .grid-secondary,
   .agentpay-grid,
   .indexer-grid,
+  .memory-grid,
   .blueprint-grid,
   .contest-ribbon,
   .submission-pack-grid,
