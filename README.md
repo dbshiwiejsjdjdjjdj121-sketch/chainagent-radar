@@ -6,13 +6,13 @@ ChainAgent Radar turns a Web3 wallet address into a live operating brief: native
 
 ## Live Preview
 
-Current Vercel preview: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app
+Current Vercel preview: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app
 
-QIE Growth Copilot view: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app/?contest=qie
+QIE Growth Copilot view: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app/?contest=qie
 
-BNB contest recording view: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
+BNB contest recording view: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app/?contest=bnb
 
-0G contest proof view: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
+0G contest proof view: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app/?contest=zerog
 
 Public GitHub repository: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 

@@ -2,7 +2,7 @@
 
 Target length: 60-90 seconds.
 
-Live demo: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app/?contest=qie
+Live demo: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app/?contest=qie
 
 ## Opening
 

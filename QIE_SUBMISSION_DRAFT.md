@@ -49,7 +49,7 @@ QIE Growth Copilot provides:
 
 ## Links
 
-- Live demo: https://chainagent-radar-i3wi6mxmu-yiwangyuai-7161s-projects.vercel.app/?contest=qie
+- Live demo: https://chainagent-radar-p9wdvpb0m-yiwangyuai-7161s-projects.vercel.app/?contest=qie
 - GitHub: https://github.com/dbshiwiejsjdjdjjdj121-sketch/chainagent-radar
 - Demo video: pending
 - X post: pending
