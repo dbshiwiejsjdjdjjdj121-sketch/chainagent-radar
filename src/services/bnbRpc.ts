@@ -165,7 +165,7 @@ export async function simulateBnbAgentPayment(
   const from = fromAddress.trim();
 
   if (!isEvmAddress(from)) {
-    throw new Error("Enter a full EVM address before simulating an AgentPay action.");
+    throw new Error("Enter a full EVM address before simulating an action.");
   }
 
   const amountWei = decimalNativeToWei(amountNative);
@@ -206,6 +206,7 @@ export async function simulateBnbAgentPayment(
     },
   ];
   const passed = checks.every((check) => check.passed);
+  const actionName = target.id === "qie-testnet" ? "QIE dry-run action" : "AgentPay simulation";
 
   return {
     status: passed ? "simulated" : "blocked",
@@ -220,8 +221,8 @@ export async function simulateBnbAgentPayment(
     approvalRequired: true,
     policyChecks: checks,
     message: passed
-      ? "AgentPay simulation passed. The app produced an approval ticket without sending a transaction."
-      : "AgentPay simulation was blocked by at least one policy check.",
+      ? `${actionName} passed. The app produced an approval ticket without sending a transaction.`
+      : `${actionName} was blocked by at least one policy check.`,
     simulatedAt: new Date().toISOString(),
   };
 }

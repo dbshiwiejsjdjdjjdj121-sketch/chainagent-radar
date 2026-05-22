@@ -23,7 +23,9 @@ import {
 import { startTransition, useDeferredValue, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { ecosystems, sampleSnapshot } from "./data/ecosystems";
+import { qieProof } from "./data/qieProof";
 import { formatShortHash, zeroGProof } from "./data/zeroGProof";
+import { QieGrowthDashboard } from "./components/QieGrowthDashboard";
 import { fetchBnbWalletSnapshot, simulateBnbAgentPayment } from "./services/bnbRpc";
 import type { AgentPaymentSimulation, EcosystemId, WalletSnapshot } from "./types";
 import { createAnalysis, shortenAddress } from "./utils/analysis";
@@ -38,6 +40,38 @@ const readiness = [
   { label: "Disclosure", done: true },
   { label: "README", done: true },
 ];
+
+const qieDemoWalletAddress = "0xb97ca921e25113c44C98D5C367Df6957D3707E8D";
+
+function createQieSnapshot(): WalletSnapshot {
+  return {
+    address: qieDemoWalletAddress,
+    txCount: 2,
+    activeDays: 4,
+    stableVolume: 0,
+    dexTouches: 7,
+    credentialSignals: 5,
+    riskFlags: [],
+    strengths: [
+      "QIE testnet wallet is funded for gas",
+      "QIEGrowthProof contract is deployed on QIE Testnet",
+      "AI growth brief hash is anchored in a QIE proof transaction",
+      "Explorer links are ready for judge inspection",
+    ],
+    source: "demo",
+    sourceLabel: "QIE proof snapshot",
+    nativeBalance: "2",
+    nativeSymbol: "QIE",
+    chainId: 1983,
+    blockNumber: 6332810,
+    indexerStatus: "partial",
+    indexerMessage:
+      "QIE proof snapshot loaded. Run the brief to refresh the wallet balance, transaction count, and latest block from public QIE RPC.",
+    tokenTransferCount: 0,
+    contractInteractionCount: 1,
+    topTokenSymbols: ["QIE RPC", "GrowthProof", "Explorer"],
+  };
+}
 
 const contestProfiles: Record<
   EcosystemId,
@@ -73,20 +107,20 @@ const contestProfiles: Record<
       "ChainAgent Radar for Mantle explains wallet behavior, yield exposure, and agent action confidence in one sponsor-specific operating brief.",
   },
   qie: {
-    brand: "QIE ChainAgent",
-    sidebarLabel: "QIE blueprint",
-    sidebarNote: "Contest-specific shell only. Add QIE-native SDK/API proof before recording.",
-    overline: "QIE recording draft",
-    headline: "QIE wallet actions, translated into an AI operating brief.",
+    brand: "QIE Growth Copilot",
+    sidebarLabel: "QIE testnet build",
+    sidebarNote: "Dedicated QIE version. Use QIE testnet RPC first, then deploy the proof contract before recording.",
+    overline: "QIE Hackathon build",
+    headline: "AI growth intelligence for QIE wallets and builders.",
     heroCopy:
-      "A focused QIE version should guide wallet, pass, stable, and DEX actions without leaking BNB demo data into the submission.",
-    ribbonCopy: "This mode is ready for copy/story review, but the QIE adapter still needs real ecosystem calls.",
-    panelLabel: "QIE contest draft",
-    panelTitle: "QIE wallet action blueprint",
-    primaryActionLabel: "Refresh QIE blueprint",
-    recordingNote: "Blueprint only: use this for planning, not final submission, until QIE-native integration is live.",
+      "A focused QIE version that reads QIE testnet wallet state, explains growth readiness, and prepares a contract-backed proof for the final submission.",
+    ribbonCopy: "QIE RPC is wired. Next milestone: deploy the GrowthProof contract after a faucet-funded test wallet is ready.",
+    panelLabel: "QIE live testnet demo",
+    panelTitle: "QIE wallet brief + growth proof",
+    primaryActionLabel: "Run QIE testnet brief",
+    recordingNote: "Recording-safe after the proof contract is deployed: show QIE testnet RPC, wallet activity, contract address, and explorer transaction.",
     pitch:
-      "ChainAgent Radar for QIE packages wallet readiness, QIE ecosystem actions, and disclosure into a judge-friendly submission brief.",
+      "QIE Growth Copilot helps QIE builders turn wallet activity into an AI adoption brief, then anchors the brief hash on QIE testnet for judges to verify.",
   },
   bnb: {
     brand: "BNB ChainAgent",
@@ -178,7 +212,7 @@ function createContestSnapshot(sourceLabel: string): WalletSnapshot {
 function createInitialSnapshots(): Record<EcosystemId, WalletSnapshot> {
   return {
     mantle: createContestSnapshot("Mantle contest demo snapshot"),
-    qie: createContestSnapshot("QIE contest demo snapshot"),
+    qie: createQieSnapshot(),
     bnb: createContestSnapshot("BNB demo snapshot"),
     zerog: createContestSnapshot("0G agent memory demo snapshot"),
     hackindia: createContestSnapshot("Sharp contest demo snapshot"),
@@ -188,7 +222,7 @@ function createInitialSnapshots(): Record<EcosystemId, WalletSnapshot> {
 function createInitialAddresses(): Record<EcosystemId, string> {
   return {
     mantle: sampleSnapshot.address,
-    qie: sampleSnapshot.address,
+    qie: qieDemoWalletAddress,
     bnb: sampleSnapshot.address,
     zerog: sampleSnapshot.address,
     hackindia: sampleSnapshot.address,
@@ -198,7 +232,7 @@ function createInitialAddresses(): Record<EcosystemId, string> {
 function createInitialStatusMessages(): Record<EcosystemId, string> {
   return {
     mantle: "Mantle blueprint loaded. Live adapter work stays isolated until the contest version is built.",
-    qie: "QIE blueprint loaded. No BNB live data is reused in this contest view.",
+    qie: "QIE proof snapshot loaded. Run the QIE brief to sync live public RPC data before recording.",
     bnb: "Demo snapshot loaded. Run the BNB brief to sync live public RPC data.",
     zerog: "0G proof mode loaded. Generate an agent memory payload and show the attached Storage root plus ChainScan transaction.",
     hackindia: "Sharp blueprint loaded. Eligibility and SDK work stay isolated from other contests.",
@@ -232,10 +266,17 @@ function App() {
   const contestProfile = contestProfiles[ecosystem.id];
   const isContestMode = viewMode === "contest";
   const hasZeroGProof = ecosystem.id === "zerog" && zeroGProof.status === "uploaded";
+  const hasQieProof = ecosystem.id === "qie" && qieProof.status === "deployed";
   const isZeroGContest = isContestMode && ecosystem.id === "zerog";
-  const isRecordingReady = isContestMode && (ecosystem.adapterStatus === "ready" || hasZeroGProof);
+  const isQieContest = isContestMode && ecosystem.id === "qie";
+  const isRecordingReady =
+    isContestMode && (isQieContest ? hasQieProof : ecosystem.adapterStatus === "ready" || hasZeroGProof);
   const integrationStatusLabel = hasZeroGProof
     ? "0G proof attached"
+    : ecosystem.id === "qie"
+      ? hasQieProof
+        ? "QIE proof deployed"
+        : "QIE RPC wired"
     : ecosystem.adapterStatus === "ready"
       ? "Live adapter"
       : "Adapter blueprint";
@@ -246,6 +287,7 @@ function App() {
   const deferredAddress = useDeferredValue(address);
   const isLiveRpc = Boolean(ecosystem.rpcTarget && snapshot.source === "live-rpc");
   const hasLiveAgentPay = Boolean(ecosystem.rpcTarget);
+  const actionSimulationLabel = ecosystem.id === "qie" ? "QIE dry-run action" : "AgentPay";
   const analysis = useMemo(() => createAnalysis(ecosystem, snapshot), [ecosystem, snapshot]);
   const submissionMarkdown = useMemo(
     () => createSubmissionMarkdown({ ecosystem, snapshot, analysis, simulation }),
@@ -289,6 +331,14 @@ function App() {
         { label: "README draft", done: true },
         { label: "X post", done: false },
       ]
+    : ecosystem.id === "qie"
+      ? [
+          { label: "Public repo", done: true },
+          { label: "QIE RPC", done: true },
+          { label: "Proof contract", done: hasQieProof },
+          { label: "Demo video", done: false },
+          { label: "README draft", done: true },
+        ]
     : readiness;
 
   function changeViewMode(nextMode: ViewMode) {
@@ -444,7 +494,7 @@ function App() {
             passed: true,
           },
         ],
-        message: "AgentPay simulation could not produce an approval ticket.",
+        message: `${actionSimulationLabel} could not produce an approval ticket.`,
         simulatedAt: new Date().toISOString(),
       });
     } finally {
@@ -501,6 +551,23 @@ function App() {
   }
 
   const completed = activeReadiness.filter((item) => item.done).length;
+
+  if (isQieContest) {
+    return (
+      <QieGrowthDashboard
+        ecosystem={ecosystem}
+        address={address}
+        snapshot={snapshot}
+        analysis={analysis}
+        statusMessage={statusMessage}
+        isAnalyzing={isAnalyzing}
+        copyState={copyState}
+        onAddressChange={(nextAddress) => updateAddress(ecosystemId, nextAddress)}
+        onRunAnalysis={runAnalysis}
+        onCopySubmissionPack={copySubmissionPack}
+      />
+    );
+  }
 
   return (
     <main
@@ -777,11 +844,16 @@ function App() {
         </section>
 
         {isZeroGContest ? null : ecosystem.rpcTarget ? (
-        <section className="panel indexer-panel" aria-label={`${ecosystem.name} indexer intelligence`}>
+        <section
+          className="panel indexer-panel"
+          aria-label={`${ecosystem.name} ${ecosystem.id === "qie" ? "proof intelligence" : "indexer intelligence"}`}
+        >
           <div className="panel-heading">
             <div>
-              <p className="section-label">{ecosystem.name} indexer intelligence</p>
-              <h2>Token transfers and contract behavior</h2>
+              <p className="section-label">
+                {ecosystem.id === "qie" ? "QIE proof intelligence" : `${ecosystem.name} indexer intelligence`}
+              </p>
+              <h2>{ecosystem.id === "qie" ? "QIE testnet RPC and proof contract" : "Token transfers and contract behavior"}</h2>
             </div>
             <span className={`indexer-status ${snapshot.indexerStatus ?? "not-configured"}`}>
               {snapshot.indexerStatus ?? "not-configured"}
@@ -792,26 +864,52 @@ function App() {
             <div className="indexer-copy">
               <p>
                 {snapshot.indexerMessage ??
-                  "Run the BNB brief to enrich the live RPC snapshot with Etherscan V2 token transfers and normal transactions."}
+                  (ecosystem.id === "qie"
+                    ? "Run the QIE brief to verify public testnet RPC. Token-transfer indexing is optional; the proof contract is the required evidence."
+                    : "Run the BNB brief to enrich the live RPC snapshot with Etherscan V2 token transfers and normal transactions.")}
               </p>
               <div className="indexer-stats">
-                <span>
-                  <Database size={16} />
-                  {snapshot.tokenTransferCount ?? 0} ERC-20 transfers
-                </span>
-                <span>
-                  <Activity size={16} />
-                  {snapshot.contractInteractionCount ?? 0} contract methods
-                </span>
-                <span>
-                  <CircleDollarSign size={16} />
-                  ${Math.round(snapshot.stableVolume).toLocaleString()} stable volume
-                </span>
+                {ecosystem.id === "qie" ? (
+                  <>
+                    <span>
+                      <Activity size={16} />
+                      Block {snapshot.blockNumber?.toLocaleString() ?? "not synced"}
+                    </span>
+                    <span>
+                      <Layers3 size={16} />
+                      Chain {snapshot.chainId ?? ecosystem.rpcTarget.chainId}
+                    </span>
+                    <span>
+                      <ShieldCheck size={16} />
+                      {hasQieProof ? "Proof contract deployed" : "Proof contract next"}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>
+                      <Database size={16} />
+                      {snapshot.tokenTransferCount ?? 0} ERC-20 transfers
+                    </span>
+                    <span>
+                      <Activity size={16} />
+                      {snapshot.contractInteractionCount ?? 0} contract methods
+                    </span>
+                    <span>
+                      <CircleDollarSign size={16} />
+                      ${Math.round(snapshot.stableVolume).toLocaleString()} stable volume
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 
             <div className="token-strip" aria-label="Top token symbols">
-              {(snapshot.topTokenSymbols?.length ? snapshot.topTokenSymbols : ["RPC-only", "Add API key"]).map((symbol) => (
+              {(snapshot.topTokenSymbols?.length
+                ? snapshot.topTokenSymbols
+                : ecosystem.id === "qie"
+                  ? ["QIE RPC", "GrowthProof", "Explorer"]
+                  : ["RPC-only", "Add API key"]
+              ).map((symbol) => (
                 <span key={symbol}>{symbol}</span>
               ))}
             </div>
@@ -830,7 +928,11 @@ function App() {
               {!snapshot.recentTokenTransfers?.length ? (
                 <div className="indexer-empty">
                   <KeyRound size={18} />
-                  <span>Add `VITE_ETHERSCAN_API_KEY` in `.env.local` to show recent token transfers.</span>
+                  <span>
+                    {ecosystem.id === "qie"
+                      ? "QIE token-transfer indexing can be added later; the MVP proof is the QIEGrowthProof contract transaction."
+                      : "Add `VITE_ETHERSCAN_API_KEY` in `.env.local` to show recent token transfers."}
+                  </span>
                 </div>
               ) : null}
             </div>
@@ -925,15 +1027,15 @@ function App() {
         ) : null}
 
         {isZeroGContest ? null : hasLiveAgentPay ? (
-        <section className="panel agentpay-panel" aria-label="AgentPay guardrail simulation">
+        <section className="panel agentpay-panel" aria-label={`${ecosystem.name} action guardrail simulation`}>
           <div className="panel-heading">
             <div>
-              <p className="section-label">AgentPay guardrail simulation</p>
-              <h2>Estimate first, require human approval</h2>
+              <p className="section-label">{ecosystem.name} guardrail simulation</p>
+              <h2>{ecosystem.id === "qie" ? "Estimate gas, keep browser read-only" : "Estimate first, require human approval"}</h2>
             </div>
             <button className="secondary-action" type="button" onClick={runPaymentSimulation} disabled={isSimulating}>
               {isSimulating ? <RefreshCw size={16} /> : <ShieldCheck size={16} />}
-              {isSimulating ? "Simulating" : "Simulate AgentPay"}
+              {isSimulating ? "Simulating" : `Simulate ${actionSimulationLabel}`}
             </button>
           </div>
 
@@ -942,9 +1044,9 @@ function App() {
               <span className={simulation?.status === "simulated" ? "ticket-status pass" : "ticket-status"}>
                 {simulation?.status ?? "ready"}
               </span>
-              <h3>0.01 BNB self-transfer dry run</h3>
+              <h3>0.01 {ecosystem.rpcTarget?.nativeSymbol ?? "native"} self-transfer dry run</h3>
               <p>
-                The agent estimates a bounded payment action against BNB RPC, then creates an approval ticket. It never requests a
+                The agent estimates a bounded payment action against {ecosystem.name} RPC, then creates an approval ticket. It never requests a
                 signature or broadcasts a transaction.
               </p>
               {simulation ? <p className="ticket-message">{simulation.message}</p> : null}
@@ -965,7 +1067,7 @@ function App() {
               </div>
               <div>
                 <span>Session budget</span>
-                <strong>{simulation ? `${simulation.sessionBudgetNative} ${simulation.nativeSymbol}` : "0.05 BNB"}</strong>
+                <strong>{simulation ? `${simulation.sessionBudgetNative} ${simulation.nativeSymbol}` : `0.05 ${ecosystem.rpcTarget?.nativeSymbol ?? "native"}`}</strong>
               </div>
             </div>
 
@@ -1092,7 +1194,11 @@ function App() {
             </div>
             <div className="submission-checks">
               <span>Live RPC: {isLiveRpc ? "ready" : ecosystem.rpcTarget ? "run brief" : "not applicable"}</span>
-              <span>Indexer: {snapshot.indexerStatus ?? "not configured"}</span>
+              <span>
+                {ecosystem.id === "qie"
+                  ? `Proof: ${hasQieProof ? "deployed" : "contract next"}`
+                  : `Indexer: ${snapshot.indexerStatus ?? "not configured"}`}
+              </span>
               <span>Action demo: {hasLiveAgentPay ? simulation?.status ?? "not simulated" : "blueprint"}</span>
               <span>Disclosure: {hasLiveAgentPay ? "dry-run only, no signature" : "adapter not live yet"}</span>
             </div>

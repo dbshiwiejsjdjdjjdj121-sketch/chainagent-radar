@@ -23,7 +23,7 @@ export type Ecosystem = {
 };
 
 export type RpcTarget = {
-  id: "bnb-mainnet" | "bnb-testnet";
+  id: "bnb-mainnet" | "bnb-testnet" | "qie-testnet";
   name: string;
   chainId: number;
   nativeSymbol: string;

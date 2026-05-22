@@ -9,6 +9,15 @@ const bnbMainnet = {
   explorerUrl: "https://bscscan.com",
 };
 
+const qieTestnet = {
+  id: "qie-testnet" as const,
+  name: "QIE Testnet",
+  chainId: 1983,
+  nativeSymbol: "QIE",
+  rpcUrl: "https://rpc1testnet.qie.digital/",
+  explorerUrl: "https://testnet.qie.digital",
+};
+
 export const ecosystems: Ecosystem[] = [
   {
     id: "mantle",
@@ -42,21 +51,22 @@ export const ecosystems: Ecosystem[] = [
     deadline: "Jun 19, 2026",
     track: "AI + Web3 / Infrastructure",
     prizeShape: "USDT + QIE token pool",
-    chainLabel: "QIE Blockchain",
+    chainLabel: "QIE Testnet / QIE Wallet",
     primaryColor: "#A3226F",
     accentColor: "#27A56B",
-    adapterStatus: "needs-sdk",
-    sponsorHooks: ["QIE Wallet", "QIE Pass", "QIE Stable", "QIE Dex", "100-user milestone"],
+    adapterStatus: "ready",
+    rpcTarget: qieTestnet,
+    sponsorHooks: ["QIE Testnet RPC", "QIE Wallet", "Growth proof contract", "AI + Web3 adoption brief", "100-user milestone"],
     demoActions: [
       {
-        type: "swap",
-        label: "Guide QIE Dex action",
-        detail: "Explain a simple swap/payment path and link it to ecosystem onboarding.",
+        type: "report",
+        label: "Generate QIE growth brief",
+        detail: "Analyze a QIE wallet and turn testnet activity into an adoption-ready AI operating brief.",
       },
       {
         type: "credential",
-        label: "Prepare QIE Pass proof",
-        detail: "Turn address activity into a builder-friendly proof or growth badge.",
+        label: "Record growth proof",
+        detail: "Anchor the AI brief hash in a QIE testnet proof contract for judge verification.",
       },
     ],
   },
