@@ -1,6 +1,6 @@
 # QIE Growth Copilot Build Plan
 
-Updated: 2026-05-22, Asia/Shanghai
+Updated: 2026-05-23, Asia/Shanghai
 
 ## Goal
 
@@ -24,6 +24,8 @@ QIE Growth Copilot is an AI wallet intelligence and growth-readiness dashboard f
 - `contracts/QIEGrowthProof.sol` matches the Remix-deployed proof contract.
 - `QIEGrowthProof` is deployed on QIE Testnet.
 - A sample growth brief hash has been recorded on-chain.
+- A fresh Vercel preview is deployed for the QIE demo.
+- The public GitHub repository has been updated with the QIE build.
 
 ## QIE Network Inputs
 
@@ -43,9 +45,9 @@ QIE Growth Copilot is an AI wallet intelligence and growth-readiness dashboard f
 
 ## Next Actions
 
-1. Run local checks and build.
-2. Deploy a fresh Vercel preview with `?contest=qie`.
-3. Prepare the QIE demo script, README, X post, and HackQuest/QIE submission answers.
+1. Record a new 60-90 second demo video using the QIE Growth Copilot UI.
+2. Publish the demo video and X post close to the Jun 15 submission window.
+3. Submit GitHub, live demo, contract address, QIE integration proof, and X post during Jun 15-Jun 19.
 
 ## Anti-Abuse Rule
 
