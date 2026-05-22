@@ -56,7 +56,7 @@ function createQieSnapshot(): WalletSnapshot {
       "QIE testnet wallet is funded for gas",
       "QIEGrowthProof contract is deployed on QIE Testnet",
       "AI growth brief hash is anchored in a QIE proof transaction",
-      "Explorer links are ready for judge inspection",
+      "Explorer links are available for repeatable verification",
     ],
     source: "demo",
     sourceLabel: "QIE proof snapshot",
@@ -232,7 +232,7 @@ function createInitialAddresses(): Record<EcosystemId, string> {
 function createInitialStatusMessages(): Record<EcosystemId, string> {
   return {
     mantle: "Mantle blueprint loaded. Live adapter work stays isolated until the contest version is built.",
-    qie: "QIE proof snapshot loaded. Run the QIE brief to sync live public RPC data before recording.",
+    qie: "QIE proof snapshot loaded. Run the QIE brief to refresh balance, transaction count, and latest block from public RPC.",
     bnb: "Demo snapshot loaded. Run the BNB brief to sync live public RPC data.",
     zerog: "0G proof mode loaded. Generate an agent memory payload and show the attached Storage root plus ChainScan transaction.",
     hackindia: "Sharp blueprint loaded. Eligibility and SDK work stay isolated from other contests.",

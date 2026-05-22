@@ -172,7 +172,7 @@ export async function fetchBnbIndexerEnrichment(address: string, target: RpcTarg
     return {
       status: "not-configured",
       message:
-        "QIE public RPC is synced. Token-transfer indexing is optional for this build; final evidence should be the QIEGrowthProof contract address and explorer transaction.",
+        "QIE public RPC is synced. The QIEGrowthProof contract and explorer transaction provide the persistent proof trail.",
       tokenTransfers: [],
       recentTransactions: [],
       tokenTransferCount: 0,
@@ -180,7 +180,7 @@ export async function fetchBnbIndexerEnrichment(address: string, target: RpcTarg
       stablecoinVolume: 0,
       topTokenSymbols: [],
       riskFlags: [],
-      strengths: ["Public QIE testnet RPC path is active; proof-contract deployment is the next milestone"],
+      strengths: ["Public QIE testnet RPC path is active", "QIEGrowthProof is available for proof review"],
     };
   }
 

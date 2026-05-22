@@ -1,20 +1,18 @@
 import {
-  Activity,
   BadgeCheck,
   Blocks,
   Copy,
   Database,
   ExternalLink,
-  FileText,
   Gauge,
   GitBranch,
-  Layers3,
   Radar,
   RefreshCw,
   ShieldCheck,
   Sparkles,
   Wallet,
 } from "lucide-react";
+import { useEffect } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { qieProof } from "../data/qieProof";
 import type { AnalysisResult, Ecosystem, WalletSnapshot } from "../types";
@@ -69,12 +67,21 @@ export function QieGrowthDashboard({
   onRunAnalysis,
   onCopySubmissionPack,
 }: QieGrowthDashboardProps) {
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = "QIE Growth Copilot";
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, []);
+
   const proofReady = qieProof.status === "deployed";
   const readinessScore = proofReady ? Math.max(analysis.score, 88) : analysis.score;
   const riskLevel = readinessScore > 78 ? "Low Risk" : readinessScore > 58 ? "Medium Risk" : "High Risk";
   const blockLabel = snapshot.blockNumber ? `#${snapshot.blockNumber.toLocaleString()}` : "Run brief";
   const txLabel = snapshot.txCount.toLocaleString();
-  const copiedLabel = copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy submission";
+  const copiedLabel = copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,9 +89,9 @@ export function QieGrowthDashboard({
   }
 
   const briefSuggestions = [
-    "Use the funded QIE test wallet as the live demo subject, then show balance, transaction count, and latest block from public RPC.",
-    "Point judges to the deployed QIEGrowthProof contract so the AI brief hash is inspectable on the QIE testnet explorer.",
-    "Position this as a builder onboarding copilot: before a QIE app launches, it can check wallet readiness and anchor an auditable growth brief.",
+    "Confirm the wallet has active QIE testnet history before onboarding it into an ecosystem campaign.",
+    "Use the readiness score to decide whether the wallet should receive a growth task, product invite, or follow-up review.",
+    "Anchor each generated brief with QIEGrowthProof so the growth signal can be checked again later.",
   ];
 
   return (
@@ -105,9 +112,6 @@ export function QieGrowthDashboard({
       </nav>
 
       <section className="qie-hero" id="dashboard">
-        <div className="qie-orb qie-orb-a" aria-hidden="true" />
-        <div className="qie-orb qie-orb-b" aria-hidden="true" />
-
         <div className="qie-badge-row" aria-label="Project status">
           <span>QIE Proof Deployed</span>
           <span className="accent">AI + Web3</span>
@@ -116,8 +120,7 @@ export function QieGrowthDashboard({
 
         <h1>QIE Growth Copilot</h1>
         <p>
-          Analyze QIE testnet wallet activity, generate an AI growth brief, and anchor the proof on QIE Testnet for
-          judge verification.
+          Analyze QIE testnet wallet activity, generate an AI growth brief, and anchor the result on QIE Testnet.
         </p>
 
         <form className="qie-command" onSubmit={handleSubmit}>
@@ -153,7 +156,7 @@ export function QieGrowthDashboard({
             <strong>{readinessScore}</strong>
             <small>/ 100</small>
           </div>
-          <p>{proofReady ? "QIE proof deployed and explorer-verifiable" : "QIE proof contract still pending"}</p>
+          <p>{proofReady ? "Growth proof is active on QIE Testnet" : "Growth proof is not active yet"}</p>
         </article>
 
         <div className="qie-metric-grid">
@@ -253,33 +256,33 @@ export function QieGrowthDashboard({
           <span>03</span>
           <h3>Anchor proof</h3>
           <p>
-            The brief hash is recorded by <strong>{qieProof.contractName}</strong>, giving judges a contract address and
-            transaction hash to inspect.
+            The brief hash is recorded by <strong>{qieProof.contractName}</strong>, creating a reusable proof trail for
+            wallet growth decisions.
           </p>
         </article>
       </section>
 
-      <section className="qie-card qie-submission-card" aria-label="Submission readiness">
+      <section className="qie-card qie-action-card" aria-label="QIE builder action plan">
         <div>
-          <span className="qie-card-label">Submission Pack</span>
-          <h2>Ready for the Jun 15 submission window</h2>
+          <span className="qie-card-label">Builder Action Plan</span>
+          <h2>Turn wallet signals into QIE growth actions</h2>
           <p>
-            GitHub, live demo, deployed QIE contract, and the AI + Web3 track story are separated from earlier hackathon
-            builds.
+            Keep the wallet analysis, AI brief, and proof hash together so ecosystem teams can review readiness before
+            the next onboarding step.
           </p>
         </div>
-        <div className="qie-submission-list">
+        <div className="qie-action-list">
           <span>
-            <BadgeCheck size={16} /> GitHub ready
+            <BadgeCheck size={16} /> Wallet activity checked
           </span>
           <span>
-            <BadgeCheck size={16} /> Contract deployed
+            <BadgeCheck size={16} /> Growth brief generated
           </span>
           <span>
-            <BadgeCheck size={16} /> QIE integration ready
+            <BadgeCheck size={16} /> Proof hash recorded
           </span>
           <span>
-            <FileText size={16} /> Demo video next
+            <BadgeCheck size={16} /> QIE path selected
           </span>
         </div>
         <button type="button" onClick={onCopySubmissionPack}>
@@ -290,18 +293,18 @@ export function QieGrowthDashboard({
 
       <footer className="qie-footer">
         <span>
-          <i aria-hidden="true" /> Public repo ready
+          <i aria-hidden="true" /> Public QIE RPC
         </span>
         <span>
-          <i aria-hidden="true" /> Live demo deploy next
+          <i aria-hidden="true" /> Proof contract active
         </span>
         <span>
-          <i aria-hidden="true" /> Contract deployed
+          <i aria-hidden="true" /> Brief hash recorded
         </span>
         <span>
-          <i aria-hidden="true" /> QIE proof verified
+          <i aria-hidden="true" /> QIE Testnet
         </span>
-        <small>© 2026 QIE Growth Copilot. Built for QIE Blockchain Hackathon 2026.</small>
+        <small>© 2026 QIE Growth Copilot.</small>
       </footer>
     </main>
   );

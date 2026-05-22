@@ -21,12 +21,12 @@ export function createAnalysis(ecosystem: Ecosystem, snapshot: WalletSnapshot): 
     : "";
   const valueSummary = snapshot.source === "live-rpc"
     ? `${snapshot.nativeBalance ?? "0"} ${snapshot.nativeSymbol ?? ""} native balance, ${snapshot.blockNumber?.toLocaleString() ?? "latest"} verified block${indexerSummary}`
-    : `$${snapshot.stableVolume.toLocaleString()} in stablecoin-style demo volume`;
+    : `$${snapshot.stableVolume.toLocaleString()} in sample stablecoin-style activity`;
 
   return {
     score,
     riskLevel,
-    summary: `${shortenAddress(snapshot.address)} shows enough activity to support a ${ecosystem.name} demo, with ${snapshot.txCount} transactions, ${snapshot.dexTouches} action clusters, and ${valueSummary}.`,
+    summary: `${shortenAddress(snapshot.address)} shows enough activity for a ${ecosystem.name} readiness brief, with ${snapshot.txCount} transactions, ${snapshot.dexTouches} action clusters, and ${valueSummary}.`,
     signals: [
       `${ecosystem.chainLabel} adapter: ${ecosystem.adapterStatus}`,
       `Data source: ${snapshot.sourceLabel}`,

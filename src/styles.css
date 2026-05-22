@@ -1774,7 +1774,7 @@ input {
 .qie-dashboard-grid,
 .qie-proof-card,
 .qie-proof-flow,
-.qie-submission-card,
+.qie-action-card,
 .qie-footer {
   width: min(1064px, calc(100% - 48px));
   margin-inline: auto;
@@ -1854,29 +1854,6 @@ input {
   justify-items: center;
   padding: clamp(72px, 8vw, 128px) 0 48px;
   text-align: center;
-}
-
-.qie-orb {
-  position: absolute;
-  z-index: -1;
-  border-radius: 999px;
-  filter: blur(74px);
-  opacity: 0.48;
-}
-
-.qie-orb-a {
-  top: 48px;
-  width: 340px;
-  height: 340px;
-  background: rgba(124, 58, 237, 0.34);
-}
-
-.qie-orb-b {
-  right: 8%;
-  bottom: 44px;
-  width: 220px;
-  height: 220px;
-  background: rgba(34, 211, 238, 0.18);
 }
 
 .qie-badge-row {
@@ -1965,7 +1942,7 @@ input {
 }
 
 .qie-command button,
-.qie-submission-card button {
+.qie-action-card button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2143,7 +2120,7 @@ input {
 
 .qie-section-heading,
 .qie-proof-header,
-.qie-submission-card {
+.qie-action-card {
   display: flex;
   align-items: center;
 }
@@ -2158,7 +2135,7 @@ input {
 
 .qie-section-heading h2,
 .qie-proof-flow h3,
-.qie-submission-card h2 {
+.qie-action-card h2 {
   margin: 0;
   color: #edf4ff;
   font-family: "Geist", "Inter", sans-serif;
@@ -2178,7 +2155,7 @@ input {
 
 .qie-brief-grid p,
 .qie-proof-flow p,
-.qie-submission-card p {
+.qie-action-card p {
   margin: 8px 0 0;
   color: var(--qie-text);
   line-height: 1.55;
@@ -2186,7 +2163,7 @@ input {
 
 .qie-proof-card,
 .qie-proof-flow,
-.qie-submission-card {
+.qie-action-card {
   margin-top: 46px;
 }
 
@@ -2265,29 +2242,29 @@ input {
   color: var(--qie-green);
 }
 
-.qie-submission-card {
+.qie-action-card {
   justify-content: space-between;
   gap: 24px;
   padding: 26px;
 }
 
-.qie-submission-card > div:first-child {
+.qie-action-card > div:first-child {
   max-width: 470px;
 }
 
-.qie-submission-card h2 {
+.qie-action-card h2 {
   margin-top: 8px;
   font-size: 26px;
 }
 
-.qie-submission-list {
+.qie-action-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   min-width: 330px;
 }
 
-.qie-submission-list span {
+.qie-action-list span {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -2298,11 +2275,11 @@ input {
   color: #d4e4fa;
 }
 
-.qie-submission-list svg {
+.qie-action-list svg {
   color: var(--qie-green);
 }
 
-.qie-submission-card button {
+.qie-action-card button {
   flex: 0 0 auto;
 }
 
@@ -2333,7 +2310,7 @@ input {
 @media (prefers-reduced-motion: no-preference) {
   .qie-card,
   .qie-command button,
-  .qie-submission-card button,
+  .qie-action-card button,
   .qie-nav-actions a {
     transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
   }
@@ -2345,7 +2322,7 @@ input {
   }
 
   .qie-command button:hover,
-  .qie-submission-card button:hover {
+  .qie-action-card button:hover {
     transform: translateY(-1px);
   }
 }
@@ -2354,15 +2331,15 @@ input {
   .qie-dashboard-grid,
   .qie-proof-flow,
   .qie-brief-grid,
-  .qie-submission-card {
+  .qie-action-card {
     grid-template-columns: 1fr;
   }
 
-  .qie-submission-card {
+  .qie-action-card {
     align-items: stretch;
   }
 
-  .qie-submission-list {
+  .qie-action-list {
     min-width: 0;
   }
 
@@ -2382,7 +2359,7 @@ input {
   .qie-dashboard-grid,
   .qie-proof-card,
   .qie-proof-flow,
-  .qie-submission-card,
+  .qie-action-card,
   .qie-footer {
     width: min(100% - 28px, 1064px);
   }
@@ -2413,7 +2390,7 @@ input {
 
   .qie-metric-grid,
   .qie-proof-grid,
-  .qie-submission-list {
+  .qie-action-list {
     grid-template-columns: 1fr;
   }
 
