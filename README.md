@@ -55,8 +55,8 @@ Do not record or submit the motherbase view as-is. Each final contest submission
 2. Paste a QIE testnet wallet address or keep the sample address.
 3. Click `Run QIE Brief`.
 4. Review QIE native balance, transaction count, latest block, readiness score, risk level, and recommended growth actions.
-5. After faucet funding, deploy `QIEGrowthProof` and record the proof transaction.
-6. Click `Copy submission` in the QIE submission pack.
+5. Review the deployed `QIEGrowthProof` contract, proof transaction, and report hash.
+6. Click `Copy brief` in the QIE action plan if you need a quick text summary.
 
 ## BNB Demo Flow
 
@@ -136,6 +136,7 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md).
 - [BNB_SUBMISSION_DRAFT.md](./BNB_SUBMISSION_DRAFT.md)
 - [QIE_BUILD_PLAN.md](./QIE_BUILD_PLAN.md)
 - [QIE_SUBMISSION_DRAFT.md](./QIE_SUBMISSION_DRAFT.md)
+- [QIE_FINAL_SUBMISSION_PACK.md](./QIE_FINAL_SUBMISSION_PACK.md)
 - [QIE_DEMO_SCRIPT.md](./QIE_DEMO_SCRIPT.md)
 - [DEMO_SCRIPT.md](./DEMO_SCRIPT.md)
 - [SUBMISSION_ANSWERS.md](./SUBMISSION_ANSWERS.md)

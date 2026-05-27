@@ -54,6 +54,8 @@ QIE Growth Copilot provides:
 - Demo video: pending
 - X post: pending
 
+Final copy-paste pack: `QIE_FINAL_SUBMISSION_PACK.md`
+
 ## Disclosure
 
 This project reuses the ChainAgent Radar frontend shell and submission workflow, but the QIE hackathon version adds QIE-specific positioning, QIE testnet RPC configuration, a dedicated QIEGrowthProof smart contract, QIE-specific README/script materials, and a separate demo flow. AI assistance was used for coding, copywriting, and planning; the final submission is reviewed and operated by the team.

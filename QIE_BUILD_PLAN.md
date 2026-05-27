@@ -45,9 +45,10 @@ QIE Growth Copilot is an AI wallet intelligence and growth-readiness dashboard f
 
 ## Next Actions
 
-1. Record a new 60-90 second demo video using the QIE Growth Copilot UI.
+1. Record a 45-60 second demo video using `QIE_DEMO_SCRIPT.md`.
 2. Publish the demo video and X post close to the Jun 15 submission window.
-3. Submit GitHub, live demo, contract address, QIE integration proof, and X post during Jun 15-Jun 19.
+3. Paste the final video and X links into `QIE_FINAL_SUBMISSION_PACK.md` and `QIE_SUBMISSION_DRAFT.md`.
+4. Submit GitHub, live demo, contract address, QIE integration proof, and X post during Jun 15-Jun 19.
 
 ## Anti-Abuse Rule
 
